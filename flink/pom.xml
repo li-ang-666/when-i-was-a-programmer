@@ -197,18 +197,21 @@
             <artifactId>snakeyaml</artifactId>
         </dependency>
 
-        <!--json-->
+        <!--jackson-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!--redis-->
@@ -277,13 +280,6 @@
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
-                            <!--重定向-->
-                            <!--<relocations>
-                                <relocation>
-                                    <pattern>org.apache.zookeeper</pattern>
-                                    <shadedPattern>com.liang.shaded.org.apache.zookeeper.</shadedPattern>
-                                </relocation>
-                            </relocations>-->
                         </configuration>
                     </execution>
                 </executions>

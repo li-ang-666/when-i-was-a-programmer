@@ -9,6 +9,7 @@ import com.liang.common.service.storage.obs.ObsWriter;
 import com.liang.common.service.storage.parquet.TableParquetWriter;
 import com.liang.common.service.storage.parquet.schema.ReadableSchema;
 import com.liang.common.util.ConfigUtils;
+import com.liang.common.util.JsonUtils;
 import com.liang.flink.basic.EnvironmentFactory;
 import com.liang.flink.basic.StreamFactory;
 import com.liang.flink.dto.SingleCanalBinlog;
@@ -81,7 +82,7 @@ public class DemoJob {
         @Override
         public void invoke(SingleCanalBinlog singleCanalBinlog, Context context) {
             jdbcTemplate.queryForColumnMaps("show tables");
-            obsWriter.update("0");
+            obsWriter.update(JsonUtils.toString(new ArrayList<String>()));
             hbaseTemplate.update(new HbaseOneRow(HbaseSchema.COMPANY_ALL_COUNT, "22822").put("test_key", "0"));
             HashMap<String, Object> columnMap = new HashMap<>();
             columnMap.put("id", 1);

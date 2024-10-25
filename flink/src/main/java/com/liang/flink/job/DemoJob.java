@@ -1,10 +1,12 @@
 package com.liang.flink.job;
 
 import com.liang.common.dto.Config;
+import com.liang.common.dto.HbaseOneRow;
+import com.liang.common.dto.HbaseSchema;
+import com.liang.common.service.database.template.HbaseTemplate;
 import com.liang.common.service.database.template.JdbcTemplate;
 import com.liang.common.service.storage.obs.ObsWriter;
 import com.liang.common.util.ConfigUtils;
-import com.liang.common.util.JsonUtils;
 import com.liang.flink.basic.EnvironmentFactory;
 import com.liang.flink.basic.StreamFactory;
 import com.liang.flink.dto.SingleCanalBinlog;
@@ -37,6 +39,7 @@ public class DemoJob {
         private final Config config;
         private JdbcTemplate jdbcTemplate;
         private ObsWriter obsWriter;
+        private HbaseTemplate hbaseTemplate;
 
         @Override
         public void initializeState(FunctionInitializationContext context) {
@@ -45,11 +48,15 @@ public class DemoJob {
             jdbcTemplate.enableCache();
             obsWriter = new ObsWriter("obs://hadoop-obs/flink/test/", ObsWriter.FileFormat.TXT);
             obsWriter.enableCache();
+            hbaseTemplate = new HbaseTemplate("hbaseSink");
+            hbaseTemplate.enableCache();
         }
 
         @Override
         public void invoke(SingleCanalBinlog singleCanalBinlog, Context context) {
-            obsWriter.update(JsonUtils.toString(singleCanalBinlog));
+            jdbcTemplate.queryForColumnMaps("show tables");
+            obsWriter.update("0");
+            hbaseTemplate.update(new HbaseOneRow(HbaseSchema.COMPANY_ALL_COUNT, "22822").put("test_key", "0"));
         }
 
         @Override
@@ -70,6 +77,7 @@ public class DemoJob {
         private void flush() {
             jdbcTemplate.flush();
             obsWriter.flush();
+            hbaseTemplate.flush();
         }
     }
 }

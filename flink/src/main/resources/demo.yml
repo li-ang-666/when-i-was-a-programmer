@@ -4,7 +4,6 @@ flinkConfig:
   sourceParallel: 1
   otherParallel: 1
 
-
 repairTasks:
   - sourceName: "116.prism"
     tableName: "equity_ratio"

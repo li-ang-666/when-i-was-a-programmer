@@ -33,6 +33,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--kafka-->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+
         <!--parquet-->
         <dependency>
             <groupId>org.apache.parquet</groupId>

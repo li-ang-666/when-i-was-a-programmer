@@ -49,7 +49,7 @@ public class DemoJob {
 
         @Override
         public void invoke(SingleCanalBinlog singleCanalBinlog, Context context) {
-            System.out.println(JsonUtils.toString(singleCanalBinlog.getColumnMap()));
+            obsWriter.update(JsonUtils.toString(singleCanalBinlog));
         }
 
         @Override

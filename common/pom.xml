@@ -12,6 +12,28 @@
 
     <artifactId>common</artifactId>
     <dependencies>
+        <!--log4j1 + log4j2-->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-1.2-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!--parquet-->
         <dependency>
             <groupId>org.apache.parquet</groupId>
@@ -56,18 +78,6 @@
         <dependency>
             <groupId>com.huaweicloud</groupId>
             <artifactId>esdk-obs-java-bundle</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--log4j1 + log4j2 究极方案-->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-1.2-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
             <scope>provided</scope>
         </dependency>
 

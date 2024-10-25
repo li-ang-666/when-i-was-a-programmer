@@ -6,6 +6,8 @@ import com.liang.common.dto.HbaseSchema;
 import com.liang.common.service.database.template.HbaseTemplate;
 import com.liang.common.service.database.template.JdbcTemplate;
 import com.liang.common.service.storage.obs.ObsWriter;
+import com.liang.common.service.storage.parquet.TableParquetWriter;
+import com.liang.common.service.storage.parquet.schema.ReadableSchema;
 import com.liang.common.util.ConfigUtils;
 import com.liang.flink.basic.EnvironmentFactory;
 import com.liang.flink.basic.StreamFactory;
@@ -18,6 +20,9 @@ import org.apache.flink.runtime.state.FunctionSnapshotContext;
 import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @Slf4j
 @LocalConfigFile("demo.yml")
@@ -40,6 +45,7 @@ public class DemoJob {
         private JdbcTemplate jdbcTemplate;
         private ObsWriter obsWriter;
         private HbaseTemplate hbaseTemplate;
+        private TableParquetWriter tableParquetWriter;
 
         @Override
         public void initializeState(FunctionInitializationContext context) {
@@ -50,6 +56,11 @@ public class DemoJob {
             obsWriter.enableCache();
             hbaseTemplate = new HbaseTemplate("hbaseSink");
             hbaseTemplate.enableCache();
+            ArrayList<ReadableSchema> schemas = new ArrayList<>();
+            schemas.add(ReadableSchema.of("id", "bigint unsigned"));
+            schemas.add(ReadableSchema.of("name", "varchar(255)"));
+            schemas.add(ReadableSchema.of("age", "decimal(3,0)"));
+            tableParquetWriter = new TableParquetWriter("obs://hadoop-obs/flink/parquet/demo/", schemas);
         }
 
         @Override
@@ -57,6 +68,11 @@ public class DemoJob {
             jdbcTemplate.queryForColumnMaps("show tables");
             obsWriter.update("0");
             hbaseTemplate.update(new HbaseOneRow(HbaseSchema.COMPANY_ALL_COUNT, "22822").put("test_key", "0"));
+            HashMap<String, Object> columnMap = new HashMap<>();
+            columnMap.put("id", 1);
+            columnMap.put("name", "java");
+            columnMap.put("age", 30);
+            tableParquetWriter.write(columnMap);
         }
 
         @Override

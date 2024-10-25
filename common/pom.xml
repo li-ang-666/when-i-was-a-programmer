@@ -116,18 +116,21 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--jackson shaded 不能 provided-->
+        <!--jackson-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!--redis-->
@@ -199,13 +202,6 @@
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
-                            <!--重定向-->
-                            <relocations>
-                                <relocation>
-                                    <pattern>com.fasterxml.jackson.core.</pattern>
-                                    <shadedPattern>com.liang.shaded.com.fasterxml.jackson.core.</shadedPattern>
-                                </relocation>
-                            </relocations>
                         </configuration>
                     </execution>
                 </executions>

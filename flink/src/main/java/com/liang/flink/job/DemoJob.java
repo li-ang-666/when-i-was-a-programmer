@@ -21,6 +21,7 @@ import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,6 +31,7 @@ public class DemoJob {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = EnvironmentFactory.create(args);
         Config config = ConfigUtils.getConfig();
+        testHiveJdbc();
         StreamFactory.create(env)
                 .rebalance()
                 .addSink(new DemoSink(config))
@@ -37,6 +39,19 @@ public class DemoJob {
                 .uid("DemoSink")
                 .setParallelism(config.getFlinkConfig().getOtherParallel());
         env.execute("DemoJob");
+    }
+
+    private static void testHiveJdbc() throws Exception {
+        String driver = "org.apache.hive.jdbc.HiveDriver";
+        String url = "jdbc:hive2://10.99.202.153:2181,10.99.198.86:2181,10.99.203.51:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2";
+        String user = "hive";
+        String password = "";
+        Class.forName(driver);
+        DriverManager
+                .getConnection(url, user, password)
+                .createStatement()
+                .executeQuery("show tables from test")
+                .getMetaData();
     }
 
     @RequiredArgsConstructor
@@ -94,6 +109,7 @@ public class DemoJob {
             jdbcTemplate.flush();
             obsWriter.flush();
             hbaseTemplate.flush();
+            tableParquetWriter.flush();
         }
     }
 }

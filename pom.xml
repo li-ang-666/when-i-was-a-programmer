@@ -13,7 +13,7 @@
         <module>flink</module>
         <module>study</module>
         <module>spark</module>
-        <module>repair</module>
+        <module>tool</module>
         <module>hive-udf</module>
     </modules>
     <dependencyManagement>

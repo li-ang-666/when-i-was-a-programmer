@@ -8,10 +8,9 @@
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>flink</artifactId>
     <dependencies>
-        <!--log4j1 + log4j2-->
+        <!--log4j1-log4j2-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-1.2-api</artifactId>
@@ -32,7 +31,6 @@
             <artifactId>log4j-api</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <!--parquet-->
         <dependency>
             <groupId>org.apache.parquet</groupId>
@@ -44,21 +42,18 @@
             <artifactId>parquet-hadoop</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <!--bitmap-->
         <dependency>
             <groupId>org.roaringbitmap</groupId>
             <artifactId>RoaringBitmap</artifactId>
         </dependency>
-
         <!--hive-jdbc-->
         <dependency>
             <groupId>org.apache.hive</groupId>
             <artifactId>hive-jdbc</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <!--huawei-->
+        <!--obs-->
         <dependency>
             <groupId>com.huaweicloud</groupId>
             <artifactId>esdk-obs-java-bundle</artifactId>
@@ -69,46 +64,39 @@
             <artifactId>hadoop-huaweicloud</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <!--hutool-->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
         </dependency>
-
         <!--mybatis-->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
         </dependency>
-
         <!--apollo-->
         <dependency>
             <groupId>com.ctrip.framework.apollo</groupId>
             <artifactId>apollo-client</artifactId>
         </dependency>
-
         <!--hadoop-->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <!--hbase-->
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-client</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <!--common-->
         <dependency>
             <groupId>com.liang</groupId>
             <artifactId>common</artifactId>
             <version>1.0</version>
         </dependency>
-
         <!--canal-->
         <dependency>
             <groupId>com.alibaba.otter</groupId>
@@ -118,13 +106,11 @@
             <groupId>com.alibaba.otter</groupId>
             <artifactId>canal.protocol</artifactId>
         </dependency>
-
         <!--druid-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
         </dependency>
-
         <!--flink-->
         <dependency>
             <groupId>org.apache.flink</groupId>
@@ -190,25 +176,15 @@
             <artifactId>flink-table-planner-loader</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <!--yaml-->
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
         </dependency>
-
         <!--jackson-->
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
+            <groupId>com.liang</groupId>
+            <artifactId>shaded-jars</artifactId>
         </dependency>
         <!--redis-->
         <dependency>
@@ -243,7 +219,6 @@
                             <artifactSet>
                                 <excludes>
                                     <exclude>com.google.code.findbugs:jsr305</exclude>
-                                    <exclude>org.apache.zookeeper:*</exclude>
                                 </excludes>
                             </artifactSet>
                             <filters>

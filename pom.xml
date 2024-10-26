@@ -3,7 +3,6 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.liang</groupId>
     <artifactId>WhenIWasAProgrammer</artifactId>
     <packaging>pom</packaging>
@@ -18,7 +17,7 @@
     </modules>
     <dependencyManagement>
         <dependencies>
-            <!--log4j1 + log4j2-->
+            <!--log4j1-log4j2-->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-1.2-api</artifactId>
@@ -39,14 +38,30 @@
                 <artifactId>log4j-api</artifactId>
                 <version>2.17.1</version>
             </dependency>
-
             <!--kafka-->
             <dependency>
                 <groupId>org.apache.kafka</groupId>
                 <artifactId>kafka-clients</artifactId>
-                <version>2.4.0</version>
+                <version>3.2.3</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>ch.qos.logback</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
-
             <!--parquet-->
             <dependency>
                 <groupId>org.apache.parquet</groupId>
@@ -94,7 +109,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <!--mybatis-->
             <dependency>
                 <groupId>org.mybatis</groupId>
@@ -119,7 +133,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <!--hutool-->
             <dependency>
                 <groupId>cn.hutool</groupId>
@@ -144,7 +157,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <!--apollo-->
             <dependency>
                 <groupId>com.ctrip.framework.apollo</groupId>
@@ -169,8 +181,7 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
-            <!--huawei-->
+            <!--obs-->
             <dependency>
                 <groupId>com.huaweicloud</groupId>
                 <artifactId>esdk-obs-java-bundle</artifactId>
@@ -217,8 +228,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
-
             <!--hadoop-->
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
@@ -243,7 +252,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <!--hbase-->
             <dependency>
                 <groupId>org.apache.hbase</groupId>
@@ -268,7 +276,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <!--canal-->
             <dependency>
                 <groupId>com.alibaba.otter</groupId>
@@ -316,7 +323,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <!--http-->
             <dependency>
                 <groupId>org.apache.httpcomponents.client5</groupId>
@@ -341,7 +347,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <!--druid-->
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -366,7 +371,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <!--spark-->
             <dependency>
                 <groupId>org.apache.spark</groupId>
@@ -414,7 +418,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <!--flink-->
             <dependency>
                 <groupId>org.apache.flink</groupId>
@@ -481,7 +484,6 @@
                 <artifactId>flink-table-planner-loader</artifactId>
                 <version>1.18.0</version>
             </dependency>
-
             <!--yaml-->
             <dependency>
                 <groupId>org.yaml</groupId>
@@ -506,12 +508,11 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <!--jackson-->
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
-                <version>2.16.1</version>
+                <groupId>com.liang</groupId>
+                <artifactId>shaded-jars</artifactId>
+                <version>1.0</version>
                 <exclusions>
                     <exclusion>
                         <groupId>log4j</groupId>
@@ -531,53 +532,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>2.16.1</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>log4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.logging.log4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>ch.qos.logback</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>2.16.1</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>log4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.logging.log4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>ch.qos.logback</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
             <!--redis-->
             <dependency>
                 <groupId>redis.clients</groupId>
@@ -602,7 +556,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <!--jdbc-->
             <dependency>
                 <groupId>mysql</groupId>
@@ -627,7 +580,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <!--lombok-->
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -652,32 +604,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
-            <!--junit-->
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.13.2</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>log4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.logging.log4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>ch.qos.logback</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
             <!--bitmap-->
             <dependency>
                 <groupId>org.roaringbitmap</groupId>
@@ -702,7 +628,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <!--hive-jdbc-->
             <dependency>
                 <groupId>org.apache.hive</groupId>

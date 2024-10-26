@@ -8,7 +8,6 @@
         <artifactId>WhenIWasAProgrammer</artifactId>
         <version>1.0</version>
     </parent>
-
     <artifactId>hive-udf</artifactId>
     <dependencies>
         <!--hutool-->
@@ -18,16 +17,8 @@
         </dependency>
         <!--jackson-->
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
+            <groupId>com.liang</groupId>
+            <artifactId>shaded-jars</artifactId>
         </dependency>
         <!--http-->
         <dependency>

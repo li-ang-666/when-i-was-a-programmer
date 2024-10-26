@@ -10,7 +10,6 @@
     <modules>
         <module>common</module>
         <module>flink</module>
-        <module>study</module>
         <module>spark</module>
         <module>tool</module>
         <module>hive-udf</module>

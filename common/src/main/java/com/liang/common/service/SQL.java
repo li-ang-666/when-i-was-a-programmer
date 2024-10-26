@@ -1,7 +1,7 @@
 package com.liang.common.service;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.liang.shaded.com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.liang.shaded.com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 /**
  * @author Clinton Begin

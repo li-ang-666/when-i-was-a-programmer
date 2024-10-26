@@ -8,7 +8,7 @@ repairTasks:
   - sourceName: "116.prism"
     tableName: "equity_ratio"
     columns: "*"
-    where: "id <= 100"
+    where: "id <= 1"
 
 kafkaConfigs:
   kafkaSource:

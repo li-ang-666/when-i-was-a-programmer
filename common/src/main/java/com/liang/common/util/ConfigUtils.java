@@ -21,6 +21,10 @@ public class ConfigUtils {
     private static volatile Config config;
     private static volatile AtomicInteger threadNum;
 
+    public static Config createConfig() {
+        return createConfig(null);
+    }
+
     public static Config createConfig(String file) {
         Config defaultConfig = initDefaultConfig();
         if (!StringUtils.endsWith(file, SUFFIX)) {

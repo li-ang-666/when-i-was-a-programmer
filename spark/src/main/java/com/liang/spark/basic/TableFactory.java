@@ -11,6 +11,6 @@ public class TableFactory {
         return spark.read()
                 .option("header", "true")
                 .option("inferSchema", "true")
-                .csv("file:/Users/liang/Desktop/WhenIWasAProgrammer/spark/src/main/resources/" + fileName);
+                .csv("file:/Users/liang/Desktop/when-i-was-a-programmer/spark/src/main/resources/" + fileName);
     }
 }

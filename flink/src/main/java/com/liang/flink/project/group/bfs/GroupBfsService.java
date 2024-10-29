@@ -4,9 +4,7 @@ import cn.hutool.core.util.ObjUtil;
 import com.liang.common.dto.Config;
 import com.liang.common.util.ConfigUtils;
 import com.liang.common.util.TycUtils;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.java.tuple.Tuple2;
 
@@ -95,27 +93,23 @@ public class GroupBfsService {
     }
 
     @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class Node implements pathElement {
-        private String id;
-        private String name;
+        private final String id;
+        private final String name;
     }
 
     @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class Edge implements pathElement {
-        private BigDecimal ratio;
+        private final BigDecimal ratio;
     }
 
     @Data
     public static class Path implements Serializable {
-        private List<pathElement> pathElements = new ArrayList<>();
+        private final List<pathElement> pathElements = new ArrayList<>();
+        private final List<String> ids = new ArrayList<>();
+        private final Set<String> distinctIds = new HashSet<>();
         private BigDecimal totalRatio;
         private Node lastNode;
-        private List<String> ids = new ArrayList<>();
-        private Set<String> distinctIds = new HashSet<>();
 
         public static Path of(Node node) {
             Path path = new Path();
@@ -130,9 +124,12 @@ public class GroupBfsService {
         }
 
         public static Path of(Path oldPath, Edge edge, Node node) {
-            Path path = ObjUtil.cloneByStream(oldPath);
-            path.getPathElements().add(edge);
-            path.getPathElements().add(node);
+            Path path = new Path();
+            path.getPathElements().addAll(oldPath.getPathElements());
+            path.setTotalRatio(oldPath.getTotalRatio());
+            path.setLastNode(oldPath.getLastNode());
+            path.getIds().addAll(oldPath.getIds());
+            path.getDistinctIds().addAll(oldPath.getDistinctIds());
             // 边
             path.setTotalRatio(path.getTotalRatio().multiply(edge.getRatio()));
             // 点

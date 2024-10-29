@@ -8,7 +8,8 @@ import java.math.BigDecimal;
 @Slf4j
 public class RepairTest extends ConfigHolder {
     public static void main(String[] args) {
-        BigDecimal multiply = new BigDecimal("1").multiply(new BigDecimal("0.5")).multiply(new BigDecimal("0.5")).multiply(new BigDecimal("0.5"));
-        System.out.println(multiply.toPlainString());
+        BigDecimal bigDecimal = new BigDecimal("1");
+        bigDecimal.multiply(new BigDecimal("0.1"));
+        System.out.println(bigDecimal.toPlainString());
     }
 }

@@ -10,11 +10,11 @@
     </property>
     <property>
         <name>fs.obs.access.key</name>
-        <value>NT5EWZ4FRH54R2R2CB8G</value>
+        <value>KWDCVLJRGBAVCLXGCYZD</value>
     </property>
     <property>
         <name>fs.obs.secret.key</name>
-        <value>BJok3jQFTmFYUS68lFWegazYggw5anKsOFUb65bS</value>
+        <value>StwOkCAdkIeQRpLsCYuAmnLEbUVhvpP7xtGaEGx2</value>
     </property>
     <property>
         <name>fs.obs.endpoint</name>

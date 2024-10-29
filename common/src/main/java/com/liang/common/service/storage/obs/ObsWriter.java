@@ -32,8 +32,8 @@ LOCATION 'obs://hadoop-obs/flink/test';
 public class ObsWriter extends AbstractCache<String, String> {
     private final static int DEFAULT_CACHE_MILLISECONDS = 5000;
     private final static int DEFAULT_CACHE_RECORDS = 10240;
-    private final static String ACCESS_KEY = "NT5EWZ4FRH54R2R2CB8G";
-    private final static String SECRET_KEY = "BJok3jQFTmFYUS68lFWegazYggw5anKsOFUb65bS";
+    private final static String ACCESS_KEY = "KWDCVLJRGBAVCLXGCYZD";
+    private final static String SECRET_KEY = "StwOkCAdkIeQRpLsCYuAmnLEbUVhvpP7xtGaEGx2";
     private final static String END_POINT = "obs.cn-north-4.myhuaweicloud.com";
 
     @Getter

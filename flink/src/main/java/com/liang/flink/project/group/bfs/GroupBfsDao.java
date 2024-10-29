@@ -1,6 +1,7 @@
 package com.liang.flink.project.group.bfs;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjUtil;
 import com.liang.common.service.SQL;
 import com.liang.common.service.database.template.JdbcTemplate;
 import com.liang.common.util.SqlUtils;
@@ -37,7 +38,8 @@ public class GroupBfsDao {
     public void cacheInvested(Collection<String> shareholderIds, Map<String, List<Tuple2<GroupBfsService.Edge, GroupBfsService.Node>>> cachedInvestInfo) {
         shareholderIds.removeIf(cachedInvestInfo::containsKey);
         for (List<String> subShareholders : CollUtil.split(shareholderIds, 512)) {
-            String sql = new SQL().SELECT("shareholder_id,equity_ratio,company_id,company_name")
+            String sql = new SQL()
+                    .SELECT("shareholder_id", "equity_ratio", "company_id", "company_name")
                     .FROM("company_equity_relation_details")
                     .WHERE("shareholder_id in " + SqlUtils.formatValue(subShareholders))
                     .toString();
@@ -49,7 +51,7 @@ public class GroupBfsDao {
                 GroupBfsService.Edge edge = new GroupBfsService.Edge(new BigDecimal(equityRatio));
                 GroupBfsService.Node node = new GroupBfsService.Node(companyId, companyName);
                 cachedInvestInfo.compute(shareholderId, (k, v) -> {
-                    List<Tuple2<GroupBfsService.Edge, GroupBfsService.Node>> investInfo = v != null ? v : new ArrayList<>();
+                    List<Tuple2<GroupBfsService.Edge, GroupBfsService.Node>> investInfo = ObjUtil.defaultIfNull(v, new ArrayList<>());
                     investInfo.add(Tuple2.of(edge, node));
                     return investInfo;
                 });

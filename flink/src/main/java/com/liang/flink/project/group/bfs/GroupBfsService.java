@@ -50,7 +50,7 @@ public class GroupBfsService {
         Path rootPath = Path.of(rootNode);
         bfsPaths.add(rootPath);
         while (!bfsPaths.isEmpty()) {
-            dao.cacheInvested(bfsPaths.stream().map(path -> path.getLastNode().getId()).collect(Collectors.toList()), cachedInvestInfo);
+            dao.cacheInvested(bfsPaths.parallelStream().map(path -> path.getLastNode().getId()).collect(Collectors.toList()), cachedInvestInfo);
             int size = bfsPaths.size();
             {
                 log.info("level: {}, size: {}", level++, size);
@@ -66,7 +66,7 @@ public class GroupBfsService {
                         bfsPaths.add(newPath);
                     } else {
                         result.compute(polledPathLastNode, (k, v) -> {
-                            List<Path> paths = v != null ? v : new ArrayList<>();
+                            List<Path> paths = ObjUtil.defaultIfNull(v, new ArrayList<>());
                             paths.add(newPath);
                             return paths;
                         });

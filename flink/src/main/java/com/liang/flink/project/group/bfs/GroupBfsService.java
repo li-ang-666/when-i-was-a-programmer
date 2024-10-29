@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class GroupBfsService {
@@ -21,6 +22,7 @@ public class GroupBfsService {
     private final GroupBfsDao dao = new GroupBfsDao();
     private final Queue<Path> bfsPaths = new ArrayDeque<>();
     private final Map<Node, List<Path>> result = new HashMap<>();
+    private final Map<String, List<Tuple2<Edge, Node>>> cachedInvestInfo = new HashMap<>();
     private int level = 0;
 
     public static void main(String[] args) throws Exception {
@@ -46,10 +48,9 @@ public class GroupBfsService {
         String companyName = (String) companyIndexColumnMap.get("company_name");
         Node rootNode = new Node(companyId, companyName);
         Path rootPath = Path.of(rootNode);
-
         bfsPaths.add(rootPath);
-
         while (!bfsPaths.isEmpty()) {
+            dao.cacheInvested(bfsPaths.stream().map(path -> path.getLastNode().getId()).collect(Collectors.toList()), cachedInvestInfo);
             int size = bfsPaths.size();
             {
                 log.info("level: {}, size: {}", level++, size);
@@ -59,8 +60,7 @@ public class GroupBfsService {
                 Path polledPath = bfsPaths.poll();
                 Node polledPathLastNode = polledPath.getLastNode();
                 String polledPathLastId = polledPathLastNode.getId();
-                List<Tuple2<Edge, Node>> edgeAndNodes = dao.queryInvested(polledPathLastId);
-                for (Tuple2<Edge, Node> edgeAndNode : edgeAndNodes) {
+                for (Tuple2<Edge, Node> edgeAndNode : cachedInvestInfo.get(polledPathLastId)) {
                     Path newPath = Path.of(polledPath, edgeAndNode.f0, edgeAndNode.f1);
                     if (newPath.canContinueBfs()) {
                         bfsPaths.add(newPath);

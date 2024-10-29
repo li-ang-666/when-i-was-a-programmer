@@ -36,7 +36,8 @@ public class GroupBfsDao {
     }
 
     public void cacheInvested(Collection<String> shareholderIds, Map<String, List<Tuple2<GroupBfsService.Edge, GroupBfsService.Node>>> cachedInvestInfo) {
-        shareholderIds.removeIf(cachedInvestInfo::containsKey);
+        cachedInvestInfo.clear();
+        //shareholderIds.removeIf(cachedInvestInfo::containsKey);
         for (List<String> subShareholders : CollUtil.split(shareholderIds, 1000)) {
             String sql = new SQL()
                     .SELECT("shareholder_id", "equity_ratio", "company_id", "company_name")

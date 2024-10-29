@@ -12,7 +12,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class GroupBfsService {
@@ -53,11 +52,11 @@ public class GroupBfsService {
                 log.info("level: {}, size: {}", level++, size);
                 TimeUnit.SECONDS.sleep(1);
             }
-            dao.cacheInvested(bfsPaths.parallelStream().map(path -> path.getLastNode().getId()).collect(Collectors.toList()), cachedInvestInfo);
             while (size-- > 0) {
-                Path polledPath = bfsPaths.poll();
+                Path polledPath = bfsPaths.remove();
                 Node polledPathLastNode = polledPath.getLastNode();
                 String polledPathLastId = polledPathLastNode.getId();
+                dao.cacheInvested(Collections.singleton(polledPathLastId), cachedInvestInfo);
                 List<Tuple2<Edge, Node>> investInfo = cachedInvestInfo.get(polledPathLastId);
                 // 如果没有后续对外投资
                 if (investInfo == null) {

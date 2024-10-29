@@ -100,15 +100,17 @@ public class GroupBfsService {
     @Data
     public static class Path implements Serializable {
         private List<pathElement> pathElements = new ArrayList<>();
+        private BigDecimal totalRatio;
         private Node lastNode;
-        private BigDecimal ratio = new BigDecimal("1");
         private List<String> ids = new ArrayList<>();
         private Set<String> distinctIds = new HashSet<>();
 
         public static Path of(Node node) {
             Path path = new Path();
             path.getPathElements().add(node);
-            //
+            // 边
+            path.setTotalRatio(new BigDecimal("1"));
+            // 点
             path.setLastNode(node);
             path.getIds().add(node.getId());
             path.getDistinctIds().add(node.getId());
@@ -119,16 +121,17 @@ public class GroupBfsService {
             Path path = ObjUtil.cloneByStream(oldPath);
             path.getPathElements().add(edge);
             path.getPathElements().add(node);
-            //
+            // 边
+            path.setTotalRatio(path.getTotalRatio().multiply(edge.getRatio()));
+            // 点
             path.setLastNode(node);
-            path.getRatio().multiply(edge.getRatio());
             path.getIds().add(node.getId());
             path.getDistinctIds().add(node.getId());
             return path;
         }
 
         public boolean canContinueBfs() {
-            boolean biggerThanThreshold = getRatio().compareTo(THRESHOLD) >= 0;
+            boolean biggerThanThreshold = getTotalRatio().compareTo(THRESHOLD) >= 0;
             boolean noCircle = getIds().size() == getDistinctIds().size();
             return biggerThanThreshold && noCircle;
         }

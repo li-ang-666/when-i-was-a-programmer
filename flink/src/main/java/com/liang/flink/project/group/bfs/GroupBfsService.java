@@ -13,6 +13,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class GroupBfsService {
@@ -21,13 +22,13 @@ public class GroupBfsService {
     private final Map<Node, List<Path>> result = new HashMap<>();
     private int level = 0;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Config config = ConfigUtils.createConfig();
         ConfigUtils.setConfig(config);
         new GroupBfsService().bfs("25942218");
     }
 
-    public void bfs(String companyId) {
+    public void bfs(String companyId) throws Exception {
         // 格式合法
         if (!TycUtils.isUnsignedId(companyId)) {
             return;
@@ -48,8 +49,11 @@ public class GroupBfsService {
         bfsPaths.add(rootPath);
 
         while (!bfsPaths.isEmpty()) {
-            level++;
             int size = bfsPaths.size();
+            {
+                log.info("level: {}, size: {}", level++, size);
+                TimeUnit.SECONDS.sleep(1);
+            }
             while (size-- > 0) {
                 Path polledPath = bfsPaths.poll();
                 Node polledPathLastNode = polledPath.getLastNode();
@@ -95,10 +99,18 @@ public class GroupBfsService {
     @Data
     public static class Path implements Serializable {
         private List<pathElement> pathElements = new ArrayList<>();
+        private Node lastNode;
+        private BigDecimal ratio = new BigDecimal("1");
+        private List<String> ids = new ArrayList<>();
+        private Set<String> distinctIds = new HashSet<>();
 
         public static Path of(Node node) {
             Path path = new Path();
             path.getPathElements().add(node);
+            //
+            path.setLastNode(node);
+            path.getIds().add(node.getId());
+            path.getDistinctIds().add(node.getId());
             return path;
         }
 
@@ -106,24 +118,16 @@ public class GroupBfsService {
             Path path = ObjUtil.cloneByStream(oldPath);
             path.getPathElements().add(edge);
             path.getPathElements().add(node);
+            //
+            path.setLastNode(node);
+            path.getRatio().multiply(edge.getRatio());
+            path.getIds().add(node.getId());
+            path.getDistinctIds().add(node.getId());
             return path;
         }
 
-        public Node getLastNode() {
-            return (Node) pathElements.get(pathElements.size() - 1);
-        }
-
-        public BigDecimal getRatio() {
-            BigDecimal bigDecimal = new BigDecimal("1");
-            pathElements.stream()
-                    .filter(e -> e instanceof Edge)
-                    .map(e -> ((Edge) e).getRatio())
-                    .forEach(bigDecimal::multiply);
-            return bigDecimal;
-        }
-
         public boolean canContinueBfs() {
-            return this.getRatio().compareTo(BigDecimal.ZERO) != 0;
+            return (this.getRatio().compareTo(BigDecimal.ZERO) != 0) && (this.getIds().size() == this.getDistinctIds().size());
         }
     }
 }

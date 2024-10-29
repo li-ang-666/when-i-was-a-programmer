@@ -50,26 +50,38 @@ public class GroupBfsService {
         Path rootPath = Path.of(rootNode);
         bfsPaths.add(rootPath);
         while (!bfsPaths.isEmpty()) {
-            dao.cacheInvested(bfsPaths.parallelStream().map(path -> path.getLastNode().getId()).collect(Collectors.toList()), cachedInvestInfo);
             int size = bfsPaths.size();
             {
                 log.info("level: {}, size: {}", level++, size);
                 TimeUnit.SECONDS.sleep(1);
             }
+            dao.cacheInvested(bfsPaths.parallelStream().map(path -> path.getLastNode().getId()).collect(Collectors.toList()), cachedInvestInfo);
             while (size-- > 0) {
                 Path polledPath = bfsPaths.poll();
                 Node polledPathLastNode = polledPath.getLastNode();
                 String polledPathLastId = polledPathLastNode.getId();
-                for (Tuple2<Edge, Node> edgeAndNode : cachedInvestInfo.get(polledPathLastId)) {
-                    Path newPath = Path.of(polledPath, edgeAndNode.f0, edgeAndNode.f1);
-                    if (newPath.canContinueBfs()) {
-                        bfsPaths.add(newPath);
-                    } else {
-                        result.compute(polledPathLastNode, (k, v) -> {
-                            List<Path> paths = ObjUtil.defaultIfNull(v, new ArrayList<>());
-                            paths.add(newPath);
-                            return paths;
-                        });
+                List<Tuple2<Edge, Node>> investInfo = cachedInvestInfo.get(polledPathLastId);
+                // 如果没有后续对外投资
+                if (investInfo == null) {
+                    result.compute(polledPathLastNode, (k, v) -> {
+                        List<Path> paths = ObjUtil.defaultIfNull(v, new ArrayList<>());
+                        paths.add(polledPath);
+                        return paths;
+                    });
+                }
+                // 如果仍有后续对外投资
+                else {
+                    for (Tuple2<Edge, Node> edgeAndNode : investInfo) {
+                        Path newPath = Path.of(polledPath, edgeAndNode.f0, edgeAndNode.f1);
+                        if (newPath.canContinueBfs()) {
+                            bfsPaths.add(newPath);
+                        } else {
+                            result.compute(polledPathLastNode, (k, v) -> {
+                                List<Path> paths = ObjUtil.defaultIfNull(v, new ArrayList<>());
+                                paths.add(newPath);
+                                return paths;
+                            });
+                        }
                     }
                 }
             }

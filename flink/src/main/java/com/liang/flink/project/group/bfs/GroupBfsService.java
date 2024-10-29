@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class GroupBfsService {
+    private static final BigDecimal THRESHOLD = new BigDecimal("0.0001");
     private final GroupBfsDao dao = new GroupBfsDao();
     private final Queue<Path> bfsPaths = new ArrayDeque<>();
     private final Map<Node, List<Path>> result = new HashMap<>();
@@ -127,7 +128,9 @@ public class GroupBfsService {
         }
 
         public boolean canContinueBfs() {
-            return (this.getRatio().compareTo(BigDecimal.ZERO) != 0) && (this.getIds().size() == this.getDistinctIds().size());
+            boolean biggerThanThreshold = getRatio().compareTo(THRESHOLD) >= 0;
+            boolean noCircle = getIds().size() == getDistinctIds().size();
+            return biggerThanThreshold && noCircle;
         }
     }
 }

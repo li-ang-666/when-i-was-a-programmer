@@ -50,7 +50,7 @@ public class GroupBfsService {
         bfsQueue.add(rootPath);
         while (!bfsQueue.isEmpty()) {
             log.info("level: {}, size: {}", level++, bfsQueue.size());
-            List<List<Path>> subLists = CollUtil.split(bfsQueue, 100);
+            List<List<Path>> subLists = CollUtil.split(bfsQueue, 1000);
             bfsQueue.clear();
             for (List<Path> subList : subLists) {
                 dao.cacheInvested(subList.parallelStream().map(e -> e.getLastNode().getId()).collect(Collectors.toList()), cachedInvestInfo);

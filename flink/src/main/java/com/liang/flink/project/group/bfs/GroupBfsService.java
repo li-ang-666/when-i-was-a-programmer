@@ -10,12 +10,13 @@ import org.apache.flink.api.java.tuple.Tuple2;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class GroupBfsService {
-    private static final BigDecimal THRESHOLD = new BigDecimal("0.0001");
+    private static final BigDecimal THRESHOLD = new BigDecimal("0.0001").setScale(12, RoundingMode.DOWN);
     private final GroupBfsDao dao = new GroupBfsDao();
     private final Queue<Path> bfsPaths = new ArrayDeque<>();
     private final Map<Node, List<Path>> result = new HashMap<>();
@@ -110,29 +111,35 @@ public class GroupBfsService {
 
         public static Path of(Node node) {
             Path path = new Path();
+            // pathElements
             path.getPathElements().add(node);
-            // 边
-            path.setTotalRatio(new BigDecimal("1"));
-            // 点
-            path.setLastNode(node);
+            // ids
             path.getIds().add(node.getId());
+            // distinctIds
             path.getDistinctIds().add(node.getId());
+            // totalRatio
+            path.setTotalRatio(new BigDecimal("1").setScale(12, RoundingMode.DOWN));
+            // lastNode
+            path.setLastNode(node);
             return path;
         }
 
         public static Path of(Path oldPath, Edge edge, Node node) {
             Path path = new Path();
+            // pathElements
             path.getPathElements().addAll(oldPath.getPathElements());
-            path.setTotalRatio(oldPath.getTotalRatio());
-            path.setLastNode(oldPath.getLastNode());
+            path.getPathElements().add(edge);
+            path.getPathElements().add(node);
+            // ids
             path.getIds().addAll(oldPath.getIds());
-            path.getDistinctIds().addAll(oldPath.getDistinctIds());
-            // 边
-            path.setTotalRatio(path.getTotalRatio().multiply(edge.getRatio()));
-            // 点
-            path.setLastNode(node);
             path.getIds().add(node.getId());
+            // distinctIds
+            path.getDistinctIds().addAll(oldPath.getDistinctIds());
             path.getDistinctIds().add(node.getId());
+            // totalRatio
+            path.setTotalRatio(oldPath.getTotalRatio().multiply(edge.getRatio()).setScale(12, RoundingMode.DOWN));
+            // lastNode
+            path.setLastNode(node);
             return path;
         }
 

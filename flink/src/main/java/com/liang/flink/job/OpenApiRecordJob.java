@@ -76,6 +76,7 @@ public class OpenApiRecordJob {
         Config config = ConfigUtils.getConfig();
         final String DATABASE = (String) config.getOtherConfigs().get("database");
         final String TABLE = (String) config.getOtherConfigs().get("table");
+
         KafkaSource<KafkaRecord<String>> kafkaSource = KafkaSourceFactory.create(String::new);
         env.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), "KafkaSource")
                 .name("KafkaSource")

@@ -24,7 +24,7 @@ public class GroupBfsService {
     private final Queue<Path> bfsQueue = new ConcurrentLinkedQueue<>();
     private final Map<String, List<Tuple2<Edge, Node>>> cachedInvestInfo = new HashMap<>();
     private final Map<Node, Set<Path>> result = new ConcurrentHashMap<>();
-    private final ForkJoinPool pool = new ForkJoinPool(10);
+    private final ForkJoinPool pool = new ForkJoinPool(100);
     private int level = 0;
 
     public static void main(String[] args) throws Exception {
@@ -56,7 +56,6 @@ public class GroupBfsService {
                 // 多线程处理
                 pool.submit(() ->
                         subList.parallelStream().forEach(path -> {
-                            log.info("1");
                             Node lastNode = path.getLastNode();
                             String lastId = lastNode.getId();
                             List<Tuple2<Edge, Node>> investInfo = cachedInvestInfo.get(lastId);

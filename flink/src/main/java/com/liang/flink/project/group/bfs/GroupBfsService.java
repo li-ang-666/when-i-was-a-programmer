@@ -84,7 +84,7 @@ public class GroupBfsService {
                 }
             }
         }
-        result.forEach((k, v) -> System.out.println(k + " -> " + v));
+//        result.forEach((k, v) -> System.out.println(k + " -> " + v));
     }
 
     public interface pathElement extends Serializable {

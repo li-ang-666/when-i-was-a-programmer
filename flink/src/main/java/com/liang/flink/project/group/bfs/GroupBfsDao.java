@@ -33,6 +33,8 @@ public class GroupBfsDao {
                     .SELECT("shareholder_id", "equity_ratio", "company_id")
                     .FROM("company_equity_relation_details")
                     .WHERE("shareholder_id in " + SqlUtils.formatValue(subShareholderIds))
+                    .WHERE("shareholder_type in (1, 2)")
+                    .WHERE("equity_ratio > 0")
                     .toString();
             graphData430.queryForList(sql, rs -> {
                 String shareholderId = rs.getString(1);

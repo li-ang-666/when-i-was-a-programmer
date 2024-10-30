@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import com.liang.common.dto.Config;
 import com.liang.common.util.ConfigUtils;
+import com.liang.common.util.JsonUtils;
 import com.liang.common.util.TycUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -77,6 +78,13 @@ public class GroupBfsService {
                 });
             }
         }
+        result.forEach((k, v) -> {
+            log.info("{}", k);
+            v.forEach(path -> {
+                List<pathElement> pathElements = path.getPathElements();
+                log.info("\t{}", JsonUtils.toString(pathElements));
+            });
+        });
     }
 
     public interface pathElement extends Serializable {

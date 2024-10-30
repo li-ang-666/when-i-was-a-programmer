@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class GroupBfsService {
-    private static final int BFS_BATCH = 10_000;
     private static final BigDecimal THRESHOLD = new BigDecimal("0.0001").setScale(12, RoundingMode.DOWN);
     private final GroupBfsDao dao = new GroupBfsDao();
     private final Queue<Path> bfsQueue = new ConcurrentLinkedQueue<>();
@@ -41,10 +40,10 @@ public class GroupBfsService {
         while (!bfsQueue.isEmpty()) {
             log.info("level: {}, size: {}", level++, bfsQueue.size());
             // 切分为多段
-            List<List<Path>> subLists = CollUtil.split(bfsQueue, BFS_BATCH);
+            List<List<Path>> subLists = CollUtil.split(bfsQueue, 10_000);
             bfsQueue.clear();
             for (List<Path> subList : subLists) {
-                // 缓存该段所有股东的对外投资数据
+                // 查询该段所有股东的对外投资数据
                 Map<String, Set<Tuple2<Edge, Node>>> investInfos = dao.queryInvestInfos(subList.parallelStream().map(e -> e.getLastNode().getId()).collect(Collectors.toList()));
                 // 多线程处理
                 subList.parallelStream().forEach(path -> {

@@ -2,7 +2,6 @@ package com.liang.flink.project.bid;
 
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
-import com.google.common.collect.Lists;
 import com.liang.common.service.SQL;
 import com.liang.common.service.database.template.JdbcTemplate;
 import com.liang.common.util.JsonUtils;
@@ -18,9 +17,9 @@ public class BidService {
     private final JdbcTemplate companyBase435 = new JdbcTemplate("435.company_base");
 
     public Map<String, Object> parseBidInfo(String bidInfo) {
-        List<Map<String, Object>> purchaser = Lists.newArrayList();
-        List<Map<String, Object>> winner = Lists.newArrayList();
-        List<Map<String, Object>> winnerAmount = Lists.newArrayList();
+        List<Map<String, Object>> purchaser = new ArrayList<>();
+        List<Map<String, Object>> winner = new ArrayList<>();
+        List<Map<String, Object>> winnerAmount = new ArrayList<>();
         // parse
         List<Object> parsedObjects = ObjUtil.defaultIfNull(JsonUtils.parseJsonArr(bidInfo), new ArrayList<>());
         for (Object parsedObject : parsedObjects) {

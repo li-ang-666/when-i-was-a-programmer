@@ -48,12 +48,6 @@
             <artifactId>hutool-all</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!--mybatis-->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <!--apollo-->
         <dependency>
             <groupId>com.ctrip.framework.apollo</groupId>

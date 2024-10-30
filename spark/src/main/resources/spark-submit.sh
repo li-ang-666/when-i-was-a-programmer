@@ -32,4 +32,4 @@ nohup spark-submit \
   --conf spark.sql.shuffle.partitions=1024 \
   --conf spark.shuffle.io.maxRetries=10 \
   --conf spark.sql.autoBroadcastJoinThreshold=104857600 \
-  ./spark-1.0-jar-with-dependencies.jar config.yml >log 2>&1 &
+  ./spark-1.0.jar config.yml >log 2>&1 &

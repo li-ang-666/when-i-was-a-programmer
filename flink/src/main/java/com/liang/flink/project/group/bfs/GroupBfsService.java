@@ -22,7 +22,7 @@ public class GroupBfsService {
     private static final BigDecimal THRESHOLD = new BigDecimal("0.0001").setScale(12, RoundingMode.DOWN);
     private final GroupBfsDao dao = new GroupBfsDao();
     private final Queue<Path> bfsQueue = new ConcurrentLinkedQueue<>();
-    private final Map<Node, Set<Path>> result = new ConcurrentHashMap<>();
+    private final Map<String, Set<Path>> result = new ConcurrentHashMap<>();
 
     public static void main(String[] args) throws Exception {
         Config config = ConfigUtils.createConfig();
@@ -53,7 +53,7 @@ public class GroupBfsService {
                     Set<Tuple2<Edge, Node>> investInfo = investInfos.get(lastId);
                     // 如果没有后续对外投资
                     if (investInfo == null) {
-                        result.compute(lastNode, (k, v) -> {
+                        result.compute(lastId, (k, v) -> {
                             v = ObjUtil.defaultIfNull(v, ConcurrentHashMap.newKeySet());
                             v.add(path);
                             return v;
@@ -61,18 +61,18 @@ public class GroupBfsService {
                     }
                     // 如果仍有后续对外投资
                     else {
-                        for (Tuple2<Edge, Node> edgeAndNode : investInfo) {
+                        investInfo.parallelStream().forEach(edgeAndNode -> {
                             Path newPath = Path.of(path, edgeAndNode.f0, edgeAndNode.f1);
                             if (newPath.canContinueBfs()) {
                                 bfsQueue.add(newPath);
                             } else {
-                                result.compute(newPath.getLastNode(), (k, v) -> {
+                                result.compute(newPath.getLastNode().getId(), (k, v) -> {
                                     v = ObjUtil.defaultIfNull(v, ConcurrentHashMap.newKeySet());
                                     v.add(newPath);
                                     return v;
                                 });
                             }
-                        }
+                        });
                     }
                 });
             }

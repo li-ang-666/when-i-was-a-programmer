@@ -1,7 +1,6 @@
 package com.liang.flink.project.group.bfs;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjUtil;
 import com.liang.common.dto.Config;
 import com.liang.common.util.ConfigUtils;
 import com.liang.common.util.TycUtils;
@@ -14,6 +13,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -25,8 +25,8 @@ public class GroupBfsService {
     }
 
     private final GroupBfsDao dao = new GroupBfsDao();
-    private final Queue<Path> bfsQueue = new ArrayDeque<>();
-    private final Map<Node, List<Path>> result = new ConcurrentHashMap<>();
+    private final Queue<Path> bfsQueue = new ConcurrentLinkedQueue<>();
+    private final Map<Node, Queue<Path>> result = new ConcurrentHashMap<>();
     private final Map<String, List<Tuple2<Edge, Node>>> cachedInvestInfo = new HashMap<>();
     private int level = 0;
 
@@ -50,22 +50,20 @@ public class GroupBfsService {
         bfsQueue.add(rootPath);
         while (!bfsQueue.isEmpty()) {
             log.info("level: {}, size: {}", level++, bfsQueue.size());
+            // 切分为多段
             List<List<Path>> subLists = CollUtil.split(bfsQueue, 1000);
             bfsQueue.clear();
             for (List<Path> subList : subLists) {
+                // 缓存该段所有股东的对外投资数据
                 dao.cacheInvested(subList.parallelStream().map(e -> e.getLastNode().getId()).collect(Collectors.toList()), cachedInvestInfo);
-                Queue<Path> subQueue = new ArrayDeque<>(subList);
-                subQueue.parallelStream().forEach(polledPath -> {
+                subList.parallelStream().forEach(polledPath -> {
                     Node polledPathLastNode = polledPath.getLastNode();
                     String polledPathLastId = polledPathLastNode.getId();
                     List<Tuple2<Edge, Node>> investInfo = cachedInvestInfo.get(polledPathLastId);
                     // 如果没有后续对外投资
                     if (investInfo == null) {
-                        result.compute(polledPathLastNode, (k, v) -> {
-                            List<Path> paths = ObjUtil.defaultIfNull(v, new ArrayList<>());
-                            paths.add(polledPath);
-                            return paths;
-                        });
+                        result.putIfAbsent(polledPathLastNode, new ConcurrentLinkedQueue<>());
+                        result.get(polledPathLastNode).add(polledPath);
                     }
                     // 如果仍有后续对外投资
                     else {
@@ -74,11 +72,8 @@ public class GroupBfsService {
                             if (newPath.canContinueBfs()) {
                                 bfsQueue.add(newPath);
                             } else {
-                                result.compute(polledPathLastNode, (k, v) -> {
-                                    List<Path> paths = ObjUtil.defaultIfNull(v, new ArrayList<>());
-                                    paths.add(newPath);
-                                    return paths;
-                                });
+                                result.putIfAbsent(polledPathLastNode, new ConcurrentLinkedQueue<>());
+                                result.get(polledPathLastNode).add(polledPath);
                             }
                         }
                     }

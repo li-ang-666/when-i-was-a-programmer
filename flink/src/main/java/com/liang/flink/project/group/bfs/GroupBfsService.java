@@ -60,7 +60,9 @@ public class GroupBfsService {
                     if (investInfos.containsKey(lastId) && path.canContinueBfs()) {
                         investInfos.get(lastId).parallelStream().forEach(edgeAndNode -> {
                             Path newPath = Path.of(path, edgeAndNode.f0, edgeAndNode.f1);
-                            bfsQueue.add(newPath);
+                            if (newPath.canContinueBfs()) {
+                                bfsQueue.add(newPath);
+                            }
                         });
                     }
                 });

@@ -30,22 +30,16 @@ public class GroupBfsService {
         new GroupBfsService().bfs("25942218");
     }
 
-    public void bfs(String companyId) throws Exception {
+    public void bfs(String biggestShareholderId) throws Exception {
         // 格式合法
-        if (!TycUtils.isUnsignedId(companyId)) {
-            return;
-        }
-        // 在company_index存在
-        Map<String, Object> companyIndexColumnMap = dao.queryCompanyIndex(companyId);
-        if (companyIndexColumnMap.isEmpty()) {
+        if (!TycUtils.isUnsignedId(biggestShareholderId)) {
             return;
         }
         // 没有股东
-        if (dao.queryHasShareholder(companyId)) {
+        if (dao.queryHasShareholder(biggestShareholderId)) {
             return;
         }
-        String companyName = (String) companyIndexColumnMap.get("company_name");
-        Node rootNode = new Node(companyId, companyName);
+        Node rootNode = new Node(biggestShareholderId);
         Path rootPath = Path.of(rootNode);
         bfsQueue.add(rootPath);
         while (!bfsQueue.isEmpty()) {
@@ -94,7 +88,6 @@ public class GroupBfsService {
     @Data
     public static class Node implements pathElement {
         private final String id;
-        private final String name;
     }
 
     @Data

@@ -37,7 +37,7 @@ public class GroupBfsDao {
     public void cacheInvested(Collection<String> shareholderIds, Map<String, List<Tuple2<GroupBfsService.Edge, GroupBfsService.Node>>> cachedInvestInfo) {
         cachedInvestInfo.clear();
         String sql = new SQL()
-                .SELECT("shareholder_id", "equity_ratio", "company_id", "company_name")
+                .SELECT("shareholder_id", "equity_ratio", "company_id")
                 .FROM("company_equity_relation_details")
                 .WHERE("shareholder_id in " + SqlUtils.formatValue(shareholderIds))
                 .toString();
@@ -45,9 +45,8 @@ public class GroupBfsDao {
             String shareholderId = rs.getString(1);
             String equityRatio = rs.getString(2);
             String companyId = rs.getString(3);
-            String companyName = rs.getString(4);
             GroupBfsService.Edge edge = new GroupBfsService.Edge(new BigDecimal(equityRatio));
-            GroupBfsService.Node node = new GroupBfsService.Node(companyId, companyName);
+            GroupBfsService.Node node = new GroupBfsService.Node(companyId);
             cachedInvestInfo.compute(shareholderId, (k, v) -> {
                 List<Tuple2<GroupBfsService.Edge, GroupBfsService.Node>> investInfo = ObjUtil.defaultIfNull(v, new ArrayList<>());
                 investInfo.add(Tuple2.of(edge, node));

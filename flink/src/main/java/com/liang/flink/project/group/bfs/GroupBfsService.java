@@ -62,13 +62,15 @@ public class GroupBfsService {
                     // 如果仍有后续对外投资
                     else {
                         for (Tuple2<Edge, Node> edgeAndNode : investInfo) {
-                            Path newPath = Path.of(path, edgeAndNode.f0, edgeAndNode.f1);
+                            Edge investEdge = edgeAndNode.f0;
+                            Node investNode = edgeAndNode.f1;
+                            Path newPath = Path.of(path, investEdge, investNode);
                             if (newPath.canContinueBfs()) {
                                 bfsQueue.add(newPath);
                             } else {
-                                result.compute(lastNode, (k, v) -> {
+                                result.compute(newPath.getLastNode(), (k, v) -> {
                                     v = ObjUtil.defaultIfNull(v, ConcurrentHashMap.newKeySet());
-                                    v.add(path);
+                                    v.add(newPath);
                                     return v;
                                 });
                             }

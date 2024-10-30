@@ -60,6 +60,7 @@ public class GroupBfsService {
                     if (investInfos.containsKey(lastId) && path.canContinueBfs()) {
                         investInfos.get(lastId).parallelStream().forEach(edgeAndNode -> {
                             Path newPath = Path.of(path, edgeAndNode.f0, edgeAndNode.f1);
+                            // 不满足终止遍历条件的new path, 才加入queue
                             if (newPath.canContinueBfs()) {
                                 bfsQueue.add(newPath);
                             }

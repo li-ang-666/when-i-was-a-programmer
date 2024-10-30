@@ -14,18 +14,15 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class GroupBfsService {
     private static final int BFS_BATCH = 10_000;
-    private static final int BFS_PARALLEL = 8;
     private static final BigDecimal THRESHOLD = new BigDecimal("0.0001").setScale(12, RoundingMode.DOWN);
     private final GroupBfsDao dao = new GroupBfsDao();
     private final Queue<Path> bfsQueue = new ConcurrentLinkedQueue<>();
     private final Map<Node, Set<Path>> result = new ConcurrentHashMap<>();
-    private final ForkJoinPool pool = new ForkJoinPool(BFS_PARALLEL);
 
     public static void main(String[] args) throws Exception {
         Config config = ConfigUtils.createConfig();
@@ -48,31 +45,30 @@ public class GroupBfsService {
             bfsQueue.clear();
             for (List<Path> subList : subLists) {
                 // 缓存该段所有股东的对外投资数据
-                Map<String, List<Tuple2<Edge, Node>>> investInfos = dao.queryInvestInfos(subList.parallelStream().map(e -> e.getLastNode().getId()).collect(Collectors.toList()));
+                Map<String, Set<Tuple2<Edge, Node>>> investInfos = dao.queryInvestInfos(subList.parallelStream().map(e -> e.getLastNode().getId()).collect(Collectors.toList()));
                 // 多线程处理
-                pool.submit(() ->
-                        subList.parallelStream().forEach(path -> {
-                            Node lastNode = path.getLastNode();
-                            String lastId = lastNode.getId();
-                            List<Tuple2<Edge, Node>> investInfo = investInfos.get(lastId);
-                            // 如果没有后续对外投资
-                            if (investInfo == null) {
+                subList.parallelStream().forEach(path -> {
+                    Node lastNode = path.getLastNode();
+                    String lastId = lastNode.getId();
+                    Set<Tuple2<Edge, Node>> investInfo = investInfos.get(lastId);
+                    // 如果没有后续对外投资
+                    if (investInfo == null) {
+                        result.putIfAbsent(lastNode, ConcurrentHashMap.newKeySet());
+                        result.get(lastNode).add(path);
+                    }
+                    // 如果仍有后续对外投资
+                    else {
+                        for (Tuple2<Edge, Node> edgeAndNode : investInfo) {
+                            Path newPath = Path.of(path, edgeAndNode.f0, edgeAndNode.f1);
+                            if (newPath.canContinueBfs()) {
+                                bfsQueue.add(newPath);
+                            } else {
                                 result.putIfAbsent(lastNode, ConcurrentHashMap.newKeySet());
                                 result.get(lastNode).add(path);
                             }
-                            // 如果仍有后续对外投资
-                            else {
-                                for (Tuple2<Edge, Node> edgeAndNode : investInfo) {
-                                    Path newPath = Path.of(path, edgeAndNode.f0, edgeAndNode.f1);
-                                    if (newPath.canContinueBfs()) {
-                                        bfsQueue.add(newPath);
-                                    } else {
-                                        result.putIfAbsent(lastNode, ConcurrentHashMap.newKeySet());
-                                        result.get(lastNode).add(path);
-                                    }
-                                }
-                            }
-                        })).get();
+                        }
+                    }
+                });
             }
         }
     }

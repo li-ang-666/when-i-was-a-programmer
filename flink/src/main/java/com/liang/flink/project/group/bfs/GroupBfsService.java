@@ -1,5 +1,6 @@
 package com.liang.flink.project.group.bfs;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import com.liang.common.dto.Config;
 import com.liang.common.util.ConfigUtils;
@@ -12,13 +13,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class GroupBfsService {
     private static final BigDecimal THRESHOLD = new BigDecimal("0.0001").setScale(12, RoundingMode.DOWN);
     private final GroupBfsDao dao = new GroupBfsDao();
-    private final Queue<Path> bfsPaths = new ArrayDeque<>();
+    private final Queue<Path> bfsQueue = new ArrayDeque<>();
     private final Map<Node, List<Path>> result = new HashMap<>();
     private final Map<String, List<Tuple2<Edge, Node>>> cachedInvestInfo = new HashMap<>();
     private int level = 0;
@@ -46,45 +47,45 @@ public class GroupBfsService {
         String companyName = (String) companyIndexColumnMap.get("company_name");
         Node rootNode = new Node(companyId, companyName);
         Path rootPath = Path.of(rootNode);
-        bfsPaths.add(rootPath);
-        while (!bfsPaths.isEmpty()) {
-            int size = bfsPaths.size();
-            {
-                log.info("level: {}, size: {}", level++, size);
-                TimeUnit.SECONDS.sleep(1);
-            }
-            while (size-- > 0) {
-                Path polledPath = bfsPaths.remove();
-                Node polledPathLastNode = polledPath.getLastNode();
-                String polledPathLastId = polledPathLastNode.getId();
-                dao.cacheInvested(Collections.singleton(polledPathLastId), cachedInvestInfo);
-                List<Tuple2<Edge, Node>> investInfo = cachedInvestInfo.get(polledPathLastId);
-                // 如果没有后续对外投资
-                if (investInfo == null) {
-                    result.compute(polledPathLastNode, (k, v) -> {
-                        List<Path> paths = ObjUtil.defaultIfNull(v, new ArrayList<>());
-                        paths.add(polledPath);
-                        return paths;
-                    });
-                }
-                // 如果仍有后续对外投资
-                else {
-                    for (Tuple2<Edge, Node> edgeAndNode : investInfo) {
-                        Path newPath = Path.of(polledPath, edgeAndNode.f0, edgeAndNode.f1);
-                        if (newPath.canContinueBfs()) {
-                            bfsPaths.add(newPath);
-                        } else {
-                            result.compute(polledPathLastNode, (k, v) -> {
-                                List<Path> paths = ObjUtil.defaultIfNull(v, new ArrayList<>());
-                                paths.add(newPath);
-                                return paths;
-                            });
+        bfsQueue.add(rootPath);
+        while (!bfsQueue.isEmpty()) {
+            log.info("level: {}, size: {}", level++, bfsQueue.size());
+            List<List<Path>> subLists = CollUtil.split(bfsQueue, 100);
+            bfsQueue.clear();
+            for (List<Path> subList : subLists) {
+                dao.cacheInvested(subList.parallelStream().map(e -> e.getLastNode().getId()).collect(Collectors.toList()), cachedInvestInfo);
+                Queue<Path> subQueue = new ArrayDeque<>(subList);
+                while (!subQueue.isEmpty()) {
+                    Path polledPath = subQueue.remove();
+                    Node polledPathLastNode = polledPath.getLastNode();
+                    String polledPathLastId = polledPathLastNode.getId();
+                    List<Tuple2<Edge, Node>> investInfo = cachedInvestInfo.get(polledPathLastId);
+                    // 如果没有后续对外投资
+                    if (investInfo == null) {
+                        result.compute(polledPathLastNode, (k, v) -> {
+                            List<Path> paths = ObjUtil.defaultIfNull(v, new ArrayList<>());
+                            paths.add(polledPath);
+                            return paths;
+                        });
+                    }
+                    // 如果仍有后续对外投资
+                    else {
+                        for (Tuple2<Edge, Node> edgeAndNode : investInfo) {
+                            Path newPath = Path.of(polledPath, edgeAndNode.f0, edgeAndNode.f1);
+                            if (newPath.canContinueBfs()) {
+                                bfsQueue.add(newPath);
+                            } else {
+                                result.compute(polledPathLastNode, (k, v) -> {
+                                    List<Path> paths = ObjUtil.defaultIfNull(v, new ArrayList<>());
+                                    paths.add(newPath);
+                                    return paths;
+                                });
+                            }
                         }
                     }
                 }
             }
         }
-//        result.forEach((k, v) -> System.out.println(k + " -> " + v));
     }
 
     public interface pathElement extends Serializable {

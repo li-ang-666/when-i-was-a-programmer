@@ -13,14 +13,20 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class GroupBfsService {
     private static final BigDecimal THRESHOLD = new BigDecimal("0.0001").setScale(12, RoundingMode.DOWN);
+
+    static {
+        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "10");
+    }
+
     private final GroupBfsDao dao = new GroupBfsDao();
     private final Queue<Path> bfsQueue = new ArrayDeque<>();
-    private final Map<Node, List<Path>> result = new HashMap<>();
+    private final Map<Node, List<Path>> result = new ConcurrentHashMap<>();
     private final Map<String, List<Tuple2<Edge, Node>>> cachedInvestInfo = new HashMap<>();
     private int level = 0;
 
@@ -49,8 +55,7 @@ public class GroupBfsService {
             for (List<Path> subList : subLists) {
                 dao.cacheInvested(subList.parallelStream().map(e -> e.getLastNode().getId()).collect(Collectors.toList()), cachedInvestInfo);
                 Queue<Path> subQueue = new ArrayDeque<>(subList);
-                while (!subQueue.isEmpty()) {
-                    Path polledPath = subQueue.remove();
+                subQueue.parallelStream().forEach(polledPath -> {
                     Node polledPathLastNode = polledPath.getLastNode();
                     String polledPathLastId = polledPathLastNode.getId();
                     List<Tuple2<Edge, Node>> investInfo = cachedInvestInfo.get(polledPathLastId);
@@ -77,7 +82,7 @@ public class GroupBfsService {
                             }
                         }
                     }
-                }
+                });
             }
         }
     }

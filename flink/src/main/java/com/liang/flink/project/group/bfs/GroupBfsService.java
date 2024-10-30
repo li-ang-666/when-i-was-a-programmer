@@ -19,11 +19,13 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class GroupBfsService {
+    private static final int BFS_BATCH = 10_000;
+    private static final int BFS_PARALLEL = 8;
     private static final BigDecimal THRESHOLD = new BigDecimal("0.0001").setScale(12, RoundingMode.DOWN);
     private final GroupBfsDao dao = new GroupBfsDao();
     private final Queue<Path> bfsQueue = new ConcurrentLinkedQueue<>();
     private final Map<Node, Set<Path>> result = new ConcurrentHashMap<>();
-    private final ForkJoinPool pool = new ForkJoinPool(8);
+    private final ForkJoinPool pool = new ForkJoinPool(BFS_PARALLEL);
 
     public static void main(String[] args) throws Exception {
         Config config = ConfigUtils.createConfig();
@@ -33,21 +35,16 @@ public class GroupBfsService {
 
     public void bfs(String biggestShareholderId) throws Exception {
         // 格式合法
-        if (!TycUtils.isUnsignedId(biggestShareholderId)) {
-            return;
-        }
+        if (!TycUtils.isUnsignedId(biggestShareholderId)) return;
         // 没有股东
-        if (dao.queryHasShareholder(biggestShareholderId)) {
-            return;
-        }
-        Node rootNode = new Node(biggestShareholderId);
-        Path rootPath = Path.of(rootNode);
-        bfsQueue.add(rootPath);
+        if (dao.queryHasShareholder(biggestShareholderId)) return;
+        // bfs
         int level = 0;
+        bfsQueue.add(Path.of(new Node(biggestShareholderId)));
         while (!bfsQueue.isEmpty()) {
             log.info("level: {}, size: {}", level++, bfsQueue.size());
             // 切分为多段
-            List<List<Path>> subLists = CollUtil.split(bfsQueue, 10_000);
+            List<List<Path>> subLists = CollUtil.split(bfsQueue, BFS_BATCH);
             bfsQueue.clear();
             for (List<Path> subList : subLists) {
                 // 缓存该段所有股东的对外投资数据

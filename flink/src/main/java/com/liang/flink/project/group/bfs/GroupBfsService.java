@@ -22,10 +22,8 @@ public class GroupBfsService {
     private static final BigDecimal THRESHOLD = new BigDecimal("0.0001").setScale(12, RoundingMode.DOWN);
     private final GroupBfsDao dao = new GroupBfsDao();
     private final Queue<Path> bfsQueue = new ConcurrentLinkedQueue<>();
-    private final Map<String, List<Tuple2<Edge, Node>>> cachedInvestInfo = new HashMap<>();
     private final Map<Node, Set<Path>> result = new ConcurrentHashMap<>();
-    private final ForkJoinPool pool = new ForkJoinPool(1);
-    private int level = 0;
+    private final ForkJoinPool pool = new ForkJoinPool(8);
 
     public static void main(String[] args) throws Exception {
         Config config = ConfigUtils.createConfig();
@@ -45,6 +43,7 @@ public class GroupBfsService {
         Node rootNode = new Node(biggestShareholderId);
         Path rootPath = Path.of(rootNode);
         bfsQueue.add(rootPath);
+        int level = 0;
         while (!bfsQueue.isEmpty()) {
             log.info("level: {}, size: {}", level++, bfsQueue.size());
             // 切分为多段
@@ -52,13 +51,13 @@ public class GroupBfsService {
             bfsQueue.clear();
             for (List<Path> subList : subLists) {
                 // 缓存该段所有股东的对外投资数据
-                dao.cacheInvested(subList.parallelStream().map(e -> e.getLastNode().getId()).collect(Collectors.toList()), cachedInvestInfo);
+                Map<String, List<Tuple2<Edge, Node>>> investInfos = dao.queryInvestInfos(subList.parallelStream().map(e -> e.getLastNode().getId()).collect(Collectors.toList()));
                 // 多线程处理
                 pool.submit(() ->
                         subList.parallelStream().forEach(path -> {
                             Node lastNode = path.getLastNode();
                             String lastId = lastNode.getId();
-                            List<Tuple2<Edge, Node>> investInfo = cachedInvestInfo.get(lastId);
+                            List<Tuple2<Edge, Node>> investInfo = investInfos.get(lastId);
                             // 如果没有后续对外投资
                             if (investInfo == null) {
                                 result.putIfAbsent(lastNode, ConcurrentHashMap.newKeySet());

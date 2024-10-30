@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.java.tuple.Tuple2;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 public class GroupBfsDao {
@@ -24,8 +21,8 @@ public class GroupBfsDao {
         return graphData430.queryForObject(sql, rs -> rs.getString(1)) != null;
     }
 
-    public void cacheInvested(Collection<String> shareholderIds, Map<String, List<Tuple2<GroupBfsService.Edge, GroupBfsService.Node>>> cachedInvestInfo) {
-        cachedInvestInfo.clear();
+    public Map<String, List<Tuple2<GroupBfsService.Edge, GroupBfsService.Node>>> queryInvestInfos(Collection<String> shareholderIds) {
+        Map<String, List<Tuple2<GroupBfsService.Edge, GroupBfsService.Node>>> investInfos = new HashMap<>();
         String sql = new SQL()
                 .SELECT("shareholder_id", "equity_ratio", "company_id")
                 .FROM("company_equity_relation_details")
@@ -37,9 +34,10 @@ public class GroupBfsDao {
             String companyId = rs.getString(3);
             GroupBfsService.Edge edge = new GroupBfsService.Edge(new BigDecimal(equityRatio));
             GroupBfsService.Node node = new GroupBfsService.Node(companyId);
-            cachedInvestInfo.putIfAbsent(shareholderId, new ArrayList<>());
-            cachedInvestInfo.get(shareholderId).add(Tuple2.of(edge, node));
+            investInfos.putIfAbsent(shareholderId, new ArrayList<>());
+            investInfos.get(shareholderId).add(Tuple2.of(edge, node));
             return null;
         });
+        return investInfos;
     }
 }

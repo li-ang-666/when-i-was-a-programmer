@@ -14,11 +14,13 @@ public class BlackList extends ConfigHolder {
     public static void main(String[] args) {
         POOL.execute(deletePartner("ps://www.tianyancha.com/human/2256476524-c5989305801"));
         POOL.execute(deletePartner("https://www.tianyancha.com/human/1810538098-c424826151"));
+        POOL.execute(deletePartner("https://www.tianyancha.com/human/2274126543-c3104140294"));
         POOL.execute(deletePartner("ttps://www.tianyancha.com/human/2019184620-c611107056"));
         POOL.execute(deletePartner("https://www.tianyancha.com/human/2077813474-c3070387220"));
         POOL.execute(deletePartner("https://www.tianyancha.com/human/1807415413-c1123142789"));
         POOL.execute(deletePartner("ttps://www.tianyancha.com/human/2276910784-c5362941886"));
         POOL.execute(deletePartner("https://www.tianyancha.com/human/2294397035-c1235590572", "company_gid = 2544215070"));
+        POOL.execute(deletePartner("https://www.tianyancha.com/human/1818328930-c5348014077", "partner_human_name in ('刘艳','刘建','解飞')"));
         POOL.execute(deleteController("6713760382"));
         POOL.shutdown();
     }

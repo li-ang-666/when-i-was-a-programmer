@@ -14,6 +14,7 @@ public class BlackList extends ConfigHolder {
     public static void main(String[] args) {
         POOL.execute(deletePartner("ps://www.tianyancha.com/human/2256476524-c5989305801"));
         POOL.execute(deletePartner("https://www.tianyancha.com/human/1810538098-c424826151"));
+        POOL.execute(deletePartner("ttps://www.tianyancha.com/human/2019184620-c611107056"));
         POOL.execute(deletePartner("https://www.tianyancha.com/human/2077813474-c3070387220"));
         POOL.execute(deletePartner("https://www.tianyancha.com/human/1807415413-c1123142789"));
         POOL.execute(deletePartner("ttps://www.tianyancha.com/human/2276910784-c5362941886"));

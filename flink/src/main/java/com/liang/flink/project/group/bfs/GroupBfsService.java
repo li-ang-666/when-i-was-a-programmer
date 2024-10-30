@@ -1,6 +1,7 @@
 package com.liang.flink.project.group.bfs;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjUtil;
 import com.liang.common.dto.Config;
 import com.liang.common.util.ConfigUtils;
 import com.liang.common.util.TycUtils;
@@ -52,8 +53,11 @@ public class GroupBfsService {
                     Set<Tuple2<Edge, Node>> investInfo = investInfos.get(lastId);
                     // 如果没有后续对外投资
                     if (investInfo == null) {
-                        result.putIfAbsent(lastNode, ConcurrentHashMap.newKeySet());
-                        result.get(lastNode).add(path);
+                        result.compute(lastNode, (k, v) -> {
+                            v = ObjUtil.defaultIfNull(v, ConcurrentHashMap.newKeySet());
+                            v.add(path);
+                            return v;
+                        });
                     }
                     // 如果仍有后续对外投资
                     else {
@@ -62,8 +66,11 @@ public class GroupBfsService {
                             if (newPath.canContinueBfs()) {
                                 bfsQueue.add(newPath);
                             } else {
-                                result.putIfAbsent(lastNode, ConcurrentHashMap.newKeySet());
-                                result.get(lastNode).add(path);
+                                result.compute(lastNode, (k, v) -> {
+                                    v = ObjUtil.defaultIfNull(v, ConcurrentHashMap.newKeySet());
+                                    v.add(path);
+                                    return v;
+                                });
                             }
                         }
                     }

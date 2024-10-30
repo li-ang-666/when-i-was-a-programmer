@@ -1,6 +1,7 @@
 package com.liang.flink.project.group.bfs;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjUtil;
 import com.liang.common.service.SQL;
 import com.liang.common.service.database.template.JdbcTemplate;
 import com.liang.common.util.SqlUtils;
@@ -39,8 +40,11 @@ public class GroupBfsDao {
                 String companyId = rs.getString(3);
                 GroupBfsService.Edge edge = new GroupBfsService.Edge(new BigDecimal(equityRatio));
                 GroupBfsService.Node node = new GroupBfsService.Node(companyId);
-                investInfos.putIfAbsent(shareholderId, ConcurrentHashMap.newKeySet());
-                investInfos.get(shareholderId).add(Tuple2.of(edge, node));
+                investInfos.compute(shareholderId, (k, v) -> {
+                    v = ObjUtil.defaultIfNull(v, ConcurrentHashMap.newKeySet());
+                    v.add(Tuple2.of(edge, node));
+                    return v;
+                });
                 return null;
             });
         });

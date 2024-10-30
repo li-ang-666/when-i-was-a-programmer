@@ -59,9 +59,6 @@ import java.util.concurrent.locks.LockSupport;
 @Slf4j
 @LocalConfigFile("open-api-record-job.yml")
 public class OpenApiRecordJob {
-    // common
-    private static final String DATABASE = "flink";
-    private static final String TABLE = "open_api_record_prod";
     // hive jdbc
     private static final String DRIVER = "org.apache.hive.jdbc.HiveDriver";
     private static final String URL = "jdbc:hive2://10.99.202.153:2181,10.99.198.86:2181,10.99.203.51:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2";
@@ -72,11 +69,13 @@ public class OpenApiRecordJob {
     private static final ZoneOffset ZONE_OFFSET = ZoneOffset.of("+8");
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String DEFAULT_DATETIME = "0000-00-00 00:00:00.000";
-    private static final String DIR = "obs://hadoop-obs/hive/warehouse/" + DATABASE + ".db/" + TABLE + "/request_date=%s/";
+    private static final String DIR = "obs://hadoop-obs/hive/warehouse/%s.db/%s/request_date=%s/";
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = EnvironmentFactory.create(args);
         Config config = ConfigUtils.getConfig();
+        final String DATABASE = (String) config.getOtherConfigs().get("database");
+        final String TABLE = (String) config.getOtherConfigs().get("table");
         KafkaSource<KafkaRecord<String>> kafkaSource = KafkaSourceFactory.create(String::new);
         env.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), "KafkaSource")
                 .name("KafkaSource")
@@ -121,6 +120,8 @@ public class OpenApiRecordJob {
 
         @Override
         public void invoke(KafkaRecord<String> kafkaRecord, Context context) {
+            final String DATABASE = (String) config.getOtherConfigs().get("database");
+            final String TABLE = (String) config.getOtherConfigs().get("table");
             // read map
             String columnJson = kafkaRecord.getValue();
             Map<String, Object> columnMap = JsonUtils.parseJsonObj(columnJson);
@@ -168,7 +169,7 @@ public class OpenApiRecordJob {
             resultMap.put("params", params);
             // pt
             String pt = requestDatetime.substring(0, 10);
-            String targetDir = String.format(DIR, pt);
+            String targetDir = String.format(DIR, DATABASE, TABLE, pt);
             // write
             synchronized (pt2ObsWriter) {
                 pt2ObsWriter

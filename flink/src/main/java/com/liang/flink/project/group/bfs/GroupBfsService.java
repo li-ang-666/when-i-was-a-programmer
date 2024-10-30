@@ -50,29 +50,17 @@ public class GroupBfsService {
                 subList.parallelStream().forEach(path -> {
                     Node lastNode = path.getLastNode();
                     String lastId = lastNode.getId();
-                    // 不管有没有后续对外投资, 记录该path
+                    // 记录该path
                     result.compute(lastId, (k, v) -> {
                         v = ObjUtil.defaultIfNull(v, ConcurrentHashMap.newKeySet());
                         v.add(path);
                         return v;
                     });
-                    Set<Tuple2<Edge, Node>> investInfo = investInfos.get(lastId);
-                    // 如果还有后续对外投资
-                    if (investInfo != null) {
-                        investInfo.parallelStream().forEach(edgeAndNode -> {
+                    // 若存在对外投资, 且不满足终止遍历的条件, 产出new path
+                    if (investInfos.containsKey(lastId) && path.canContinueBfs()) {
+                        investInfos.get(lastId).parallelStream().forEach(edgeAndNode -> {
                             Path newPath = Path.of(path, edgeAndNode.f0, edgeAndNode.f1);
-                            // 如果new path还可继续使用, 直接放入queue, 下一轮会记录该new path
-                            if (newPath.canContinueBfs()) {
-                                bfsQueue.add(newPath);
-                            }
-                            // 否则记录new path, 不放入queue
-                            else {
-                                result.compute(newPath.getLastNode().getId(), (k, v) -> {
-                                    v = ObjUtil.defaultIfNull(v, ConcurrentHashMap.newKeySet());
-                                    v.add(newPath);
-                                    return v;
-                                });
-                            }
+                            bfsQueue.add(newPath);
                         });
                     }
                 });

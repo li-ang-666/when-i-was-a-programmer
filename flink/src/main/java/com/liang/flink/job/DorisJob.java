@@ -4,7 +4,7 @@ import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.liang.common.dto.Config;
 import com.liang.common.dto.DorisOneRow;
 import com.liang.common.dto.DorisSchema;
-import com.liang.common.service.database.template.doris.DorisWriter;
+import com.liang.common.service.connector.database.template.doris.DorisWriter;
 import com.liang.common.util.ConfigUtils;
 import com.liang.common.util.JsonUtils;
 import com.liang.flink.basic.EnvironmentFactory;

@@ -1,9 +1,9 @@
 package com.liang.common.util;
 
 import com.liang.common.dto.Config;
-import com.liang.common.service.database.holder.DruidHolder;
-import com.liang.common.service.database.holder.HbaseConnectionHolder;
-import com.liang.common.service.database.holder.JedisPoolHolder;
+import com.liang.common.service.connector.database.holder.DruidHolder;
+import com.liang.common.service.connector.database.holder.HbaseConnectionHolder;
+import com.liang.common.service.connector.database.holder.JedisPoolHolder;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

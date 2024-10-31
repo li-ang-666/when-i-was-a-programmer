@@ -2,7 +2,7 @@ package com.liang.flink.basic.repair;
 
 import cn.hutool.core.util.ObjUtil;
 import com.liang.common.dto.config.RepairTask;
-import com.liang.common.service.database.template.JdbcTemplate;
+import com.liang.common.service.connector.database.template.JdbcTemplate;
 import com.liang.common.util.ConfigUtils;
 import lombok.extern.slf4j.Slf4j;
 

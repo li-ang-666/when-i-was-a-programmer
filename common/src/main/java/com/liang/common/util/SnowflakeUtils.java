@@ -1,7 +1,7 @@
 package com.liang.common.util;
 
 import cn.hutool.core.lang.Snowflake;
-import com.liang.common.service.database.template.RedisTemplate;
+import com.liang.common.service.connector.database.template.RedisTemplate;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 

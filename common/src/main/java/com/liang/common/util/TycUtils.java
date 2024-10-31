@@ -1,7 +1,7 @@
 package com.liang.common.util;
 
 import com.liang.common.service.SQL;
-import com.liang.common.service.database.template.JdbcTemplate;
+import com.liang.common.service.connector.database.template.JdbcTemplate;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;

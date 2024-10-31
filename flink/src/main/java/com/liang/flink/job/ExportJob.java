@@ -2,9 +2,9 @@ package com.liang.flink.job;
 
 import cn.hutool.core.util.StrUtil;
 import com.liang.common.dto.Config;
-import com.liang.common.service.database.template.JdbcTemplate;
-import com.liang.common.service.storage.parquet.TableParquetWriter;
-import com.liang.common.service.storage.parquet.schema.ReadableSchema;
+import com.liang.common.service.connector.database.template.JdbcTemplate;
+import com.liang.common.service.connector.storage.parquet.TableParquetWriter;
+import com.liang.common.service.connector.storage.parquet.schema.ReadableSchema;
 import com.liang.common.util.ConfigUtils;
 import com.liang.common.util.SqlUtils;
 import com.liang.flink.basic.EnvironmentFactory;

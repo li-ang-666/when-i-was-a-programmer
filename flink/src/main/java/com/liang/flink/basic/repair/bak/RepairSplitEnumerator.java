@@ -2,7 +2,7 @@ package com.liang.flink.basic.repair.bak;
 
 import com.liang.common.dto.config.RepairTask;
 import com.liang.common.service.SQL;
-import com.liang.common.service.database.template.JdbcTemplate;
+import com.liang.common.service.connector.database.template.JdbcTemplate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

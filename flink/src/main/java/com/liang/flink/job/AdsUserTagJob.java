@@ -2,7 +2,7 @@ package com.liang.flink.job;
 
 import cn.hutool.core.io.IoUtil;
 import com.liang.common.dto.Config;
-import com.liang.common.service.database.template.JdbcTemplate;
+import com.liang.common.service.connector.database.template.JdbcTemplate;
 import com.liang.common.util.ConfigUtils;
 import com.liang.flink.basic.EnvironmentFactory;
 import lombok.RequiredArgsConstructor;

@@ -2,8 +2,8 @@ package com.liang.spark.job;
 
 import com.liang.common.dto.Config;
 import com.liang.common.service.SQL;
-import com.liang.common.service.database.template.JdbcTemplate;
-import com.liang.common.service.database.template.RedisTemplate;
+import com.liang.common.service.connector.database.template.JdbcTemplate;
+import com.liang.common.service.connector.database.template.RedisTemplate;
 import com.liang.common.util.*;
 import com.liang.spark.basic.SparkSessionFactory;
 import lombok.RequiredArgsConstructor;

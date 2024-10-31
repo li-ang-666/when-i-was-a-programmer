@@ -5,7 +5,7 @@ import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.liang.common.dto.Config;
 import com.liang.common.dto.config.FlinkConfig;
 import com.liang.common.service.SQL;
-import com.liang.common.service.database.template.JdbcTemplate;
+import com.liang.common.service.connector.database.template.JdbcTemplate;
 import com.liang.common.util.ConfigUtils;
 import com.liang.common.util.JsonUtils;
 import com.liang.common.util.SqlUtils;

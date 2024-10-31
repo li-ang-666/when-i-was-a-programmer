@@ -61,6 +61,11 @@
             <artifactId>esdk-obs-java-bundle</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-huaweicloud</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!--hbase-->
         <dependency>
             <groupId>org.apache.hbase</groupId>

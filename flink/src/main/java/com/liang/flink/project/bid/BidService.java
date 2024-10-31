@@ -3,7 +3,7 @@ package com.liang.flink.project.bid;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.liang.common.service.SQL;
-import com.liang.common.service.database.template.JdbcTemplate;
+import com.liang.common.service.connector.database.template.JdbcTemplate;
 import com.liang.common.util.JsonUtils;
 import com.liang.common.util.SqlUtils;
 import com.liang.common.util.TycUtils;

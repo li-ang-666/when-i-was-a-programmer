@@ -2,7 +2,7 @@ package com.liang.repair.impl.cache;
 
 import com.liang.common.dto.HbaseOneRow;
 import com.liang.common.dto.HbaseSchema;
-import com.liang.common.service.database.template.HbaseTemplate;
+import com.liang.common.service.connector.database.template.HbaseTemplate;
 import com.liang.repair.service.ConfigHolder;
 
 import java.util.ArrayList;

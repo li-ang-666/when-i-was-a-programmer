@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.liang.common.dto.Config;
 import com.liang.common.dto.config.FlinkConfig;
 import com.liang.common.service.SQL;
-import com.liang.common.service.database.template.JdbcTemplate;
+import com.liang.common.service.connector.database.template.JdbcTemplate;
 import com.liang.common.util.ConfigUtils;
 import com.liang.common.util.SqlUtils;
 import com.liang.common.util.TycUtils;

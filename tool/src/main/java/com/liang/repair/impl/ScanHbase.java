@@ -1,8 +1,8 @@
 package com.liang.repair.impl;
 
 import com.liang.common.dto.HbaseSchema;
-import com.liang.common.service.database.template.HbaseTemplate;
-import com.liang.common.service.storage.obs.ObsWriter;
+import com.liang.common.service.connector.database.template.HbaseTemplate;
+import com.liang.common.service.connector.storage.obs.ObsWriter;
 import com.liang.common.util.JsonUtils;
 import com.liang.repair.service.ConfigHolder;
 

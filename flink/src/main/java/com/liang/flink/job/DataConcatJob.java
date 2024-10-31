@@ -2,7 +2,7 @@ package com.liang.flink.job;
 
 import com.liang.common.dto.Config;
 import com.liang.common.dto.HbaseOneRow;
-import com.liang.common.service.database.template.HbaseTemplate;
+import com.liang.common.service.connector.database.template.HbaseTemplate;
 import com.liang.common.util.ConfigUtils;
 import com.liang.flink.basic.EnvironmentFactory;
 import com.liang.flink.basic.StreamFactory;

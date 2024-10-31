@@ -1,6 +1,6 @@
 package com.liang.repair.impl;
 
-import com.liang.common.service.database.template.JdbcTemplate;
+import com.liang.common.service.connector.database.template.JdbcTemplate;
 import com.liang.repair.service.ConfigHolder;
 
 public class DruidTest extends ConfigHolder {

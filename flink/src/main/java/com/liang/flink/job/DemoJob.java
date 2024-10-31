@@ -1,13 +1,13 @@
 package com.liang.flink.job;
 
 import com.liang.common.dto.*;
-import com.liang.common.service.database.template.HbaseTemplate;
-import com.liang.common.service.database.template.JdbcTemplate;
-import com.liang.common.service.database.template.doris.DorisParquetWriter;
-import com.liang.common.service.database.template.doris.DorisWriter;
-import com.liang.common.service.storage.obs.ObsWriter;
-import com.liang.common.service.storage.parquet.TableParquetWriter;
-import com.liang.common.service.storage.parquet.schema.ReadableSchema;
+import com.liang.common.service.connector.database.template.HbaseTemplate;
+import com.liang.common.service.connector.database.template.JdbcTemplate;
+import com.liang.common.service.connector.database.template.doris.DorisParquetWriter;
+import com.liang.common.service.connector.database.template.doris.DorisWriter;
+import com.liang.common.service.connector.storage.obs.ObsWriter;
+import com.liang.common.service.connector.storage.parquet.TableParquetWriter;
+import com.liang.common.service.connector.storage.parquet.schema.ReadableSchema;
 import com.liang.common.util.ConfigUtils;
 import com.liang.common.util.JsonUtils;
 import com.liang.flink.basic.EnvironmentFactory;

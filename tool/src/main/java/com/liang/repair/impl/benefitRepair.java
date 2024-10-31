@@ -1,7 +1,7 @@
 package com.liang.repair.impl;
 
 import com.liang.common.service.SQL;
-import com.liang.common.service.database.template.JdbcTemplate;
+import com.liang.common.service.connector.database.template.JdbcTemplate;
 import com.liang.common.util.SqlUtils;
 import com.liang.repair.service.ConfigHolder;
 

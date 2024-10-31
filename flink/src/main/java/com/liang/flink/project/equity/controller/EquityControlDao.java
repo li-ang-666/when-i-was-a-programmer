@@ -1,7 +1,7 @@
 package com.liang.flink.project.equity.controller;
 
 import com.liang.common.service.SQL;
-import com.liang.common.service.database.template.JdbcTemplate;
+import com.liang.common.service.connector.database.template.JdbcTemplate;
 import com.liang.common.util.SqlUtils;
 
 import java.util.HashMap;

@@ -1,7 +1,7 @@
 package com.liang.flink.basic.kafka;
 
 import com.liang.common.dto.Config;
-import com.liang.common.service.database.template.RedisTemplate;
+import com.liang.common.service.connector.database.template.RedisTemplate;
 import com.liang.common.util.ConfigUtils;
 import com.liang.flink.dto.BatchCanalBinlog;
 import com.liang.flink.dto.KafkaRecord;

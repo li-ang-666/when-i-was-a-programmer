@@ -1,6 +1,6 @@
 package com.liang.flink.basic.kafka;
 
-import com.liang.common.service.database.template.RedisTemplate;
+import com.liang.common.service.connector.database.template.RedisTemplate;
 import com.liang.common.util.ConfigUtils;
 import com.liang.common.util.DateUtils;
 import com.liang.common.util.JsonUtils;

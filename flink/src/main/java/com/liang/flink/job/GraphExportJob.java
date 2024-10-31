@@ -1,7 +1,7 @@
 package com.liang.flink.job;
 
 import com.liang.common.dto.Config;
-import com.liang.common.service.storage.obs.ObsWriter;
+import com.liang.common.service.connector.storage.obs.ObsWriter;
 import com.liang.common.util.ConfigUtils;
 import com.liang.flink.basic.EnvironmentFactory;
 import com.liang.flink.basic.StreamFactory;

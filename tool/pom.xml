@@ -122,11 +122,6 @@
             <artifactId>flink-core</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!--yaml-->
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-        </dependency>
         <!--jackson-->
         <dependency>
             <groupId>com.liang</groupId>

@@ -31,7 +31,7 @@
             <artifactId>log4j-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!--obs-->
+        <!--obs & hadoop-->
         <dependency>
             <groupId>com.huaweicloud</groupId>
             <artifactId>esdk-obs-java-bundle</artifactId>
@@ -66,40 +66,10 @@
             <artifactId>flink-core</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!--hutool-->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <!--apollo-->
-        <dependency>
-            <groupId>com.ctrip.framework.apollo</groupId>
-            <artifactId>apollo-client</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <!--bitmap-->
         <dependency>
             <groupId>org.roaringbitmap</groupId>
             <artifactId>RoaringBitmap</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <!--yaml-->
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <!--jackson-->
-        <dependency>
-            <groupId>com.liang</groupId>
-            <artifactId>shaded-jars</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <!--redis-->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
             <scope>provided</scope>
         </dependency>
         <!--druid-->
@@ -114,10 +84,34 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!--redis-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!--apollo-->
+        <dependency>
+            <groupId>com.ctrip.framework.apollo</groupId>
+            <artifactId>apollo-client</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!--hutool-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!--shaded-jackson-->
+        <dependency>
+            <groupId>com.liang</groupId>
+            <artifactId>shaded-jars</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

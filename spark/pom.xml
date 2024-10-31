@@ -132,11 +132,6 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-java</artifactId>
         </dependency>
-        <!--yaml-->
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-        </dependency>
         <!--jackson: spark need 2.10.0-->
         <dependency>
             <groupId>com.liang</groupId>

@@ -1,6 +1,6 @@
 # sourceType: KAFKA or REPAIR
 flinkConfig:
-  sourceType: REPAIR
+  sourceType: KAFKA
   sourceParallel: 1
   otherParallel: 1
 

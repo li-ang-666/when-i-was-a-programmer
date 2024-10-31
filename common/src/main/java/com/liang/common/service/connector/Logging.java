@@ -35,4 +35,16 @@ public class Logging {
             log.debug(afterLog, methodName, debugMethodArg, interval);
         }
     }
+
+    private static final class Timer {
+        private long starTimestampMilliseconds;
+
+        public void remake() {
+            starTimestampMilliseconds = System.currentTimeMillis();
+        }
+
+        public long getInterval() {
+            return System.currentTimeMillis() - starTimestampMilliseconds;
+        }
+    }
 }

@@ -11,13 +11,25 @@ import com.liang.common.service.connector.storage.parquet.TableParquetWriter;
 import com.liang.common.service.connector.storage.parquet.schema.ReadableSchema;
 import com.liang.common.util.ConfigUtils;
 import com.liang.common.util.JsonUtils;
+import lombok.extern.slf4j.Slf4j;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 public class ConnectorTester {
+    // hive jdbc
+    private static final String DRIVER = "org.apache.hive.jdbc.HiveDriver";
+    private static final String URL = "jdbc:hive2://10.99.202.153:2181,10.99.198.86:2181,10.99.203.51:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2";
+    private static final String USER = "hive";
+    private static final String PASSWORD = "";
+    // connector
     private JdbcTemplate jdbcTemplate;
     private ObsWriter obsWriter;
     private HbaseTemplate hbaseTemplate;
@@ -35,6 +47,20 @@ public class ConnectorTester {
     }
 
     public void open() {
+        try {
+            Class.forName(DRIVER);
+            try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+                try (Statement statement = connection.createStatement()) {
+                    try (ResultSet resultSet = statement.executeQuery("show tables from test")) {
+                        resultSet.next();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            String msg = "hive jdbc error";
+            log.error(msg, e);
+            throw new RuntimeException(msg, e);
+        }
         jdbcTemplate = new JdbcTemplate("427.test");
         jdbcTemplate.enableCache();
         obsWriter = new ObsWriter("obs://hadoop-obs/flink/test/", ObsWriter.FileFormat.TXT);

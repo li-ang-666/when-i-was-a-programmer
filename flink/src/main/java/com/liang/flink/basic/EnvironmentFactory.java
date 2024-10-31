@@ -64,7 +64,7 @@ public class EnvironmentFactory {
 
     private static StreamExecutionEnvironment initLocalEnv() {
         Configuration configuration = new Configuration();
-//        configuration.setString("rest.bind-port", "54321");
+        configuration.setString("rest.bind-port", "54321");
         configuration.setString("state.checkpoints.dir", "file:///Users/liang/Desktop/flink-checkpoints/");
 //        configuration.setString("execution.savepoint.path", "file:/Users/liang/Desktop/flink-checkpoints/d488877a7ffa7e9efd6383e709e790a7/chk-1");
         return StreamExecutionEnvironment.getExecutionEnvironment(configuration);

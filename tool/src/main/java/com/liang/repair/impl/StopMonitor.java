@@ -16,15 +16,6 @@ public class StopMonitor {
     private final static List<Tuple3<String, String, String>> LIST = new ArrayList<>();
 
     static {
-        LIST.add(Tuple3.of("liang", "Moka20190520", "InvestmentRelationJob"));
-        LIST.add(Tuple3.of("liang", "Moka20190520", "company_bid_parsed_info"));
-        LIST.add(Tuple3.of("liang", "Moka20190520", "PatentJob"));
-        LIST.add(Tuple3.of("liang", "Moka20190520", "BidAiV1Job"));
-        LIST.add(Tuple3.of("liang", "Moka20190520", "BidAiV2Job"));
-        LIST.add(Tuple3.of("liang", "Moka20190520", "BidToCloudJob火山云线上任务"));
-        LIST.add(Tuple3.of("liang", "Moka20190520", "company_bid_parsed_info"));
-        LIST.add(Tuple3.of("liang", "Moka20190520", "BidJob离线修复"));
-        LIST.add(Tuple3.of("liang", "Moka20190520", "RelationEdgeJob"));
         LIST.add(Tuple3.of("liang", "Moka20190520", "DemoJob"));
     }
 

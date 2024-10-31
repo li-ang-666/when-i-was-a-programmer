@@ -17,10 +17,21 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+/*
+  -- doris
+  drop table test.demo;
+  create table test.demo(id largeint,name string,age int,create_time datetime)unique key(id) distributed by hash(id) buckets 1;
+  -- hive
+  drop table flink.demo;
+  create table flink.demo(id decimal(20,0),name string,age decimal(3,0),create_time string)stored as parquet location 'obs://hadoop-obs/flink/parquet/demo';
+*/
 
 @Slf4j
 public class ConnectorTester {
@@ -38,7 +49,8 @@ public class ConnectorTester {
     private final TableParquetWriter tableParquetWriter = new TableParquetWriter("obs://hadoop-obs/flink/parquet/demo/", Arrays.asList(
             ReadableSchema.of("id", "bigint unsigned"),
             ReadableSchema.of("name", "varchar(255)"),
-            ReadableSchema.of("age", "decimal(3,0)")
+            ReadableSchema.of("age", "decimal(3,0)"),
+            ReadableSchema.of("create_time", "datetime")
     ));
 
     {
@@ -72,13 +84,15 @@ public class ConnectorTester {
             throw new RuntimeException(msg, e);
         }
         // connector
+        String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         Map<String, Object> columnMap = new HashMap<>();
         columnMap.put("id", IdUtil.getSnowflakeNextIdStr());
         columnMap.put("name", UUID.randomUUID().toString());
         columnMap.put("age", 100);
+        columnMap.put("create_time", now);
         jdbcTemplate.queryForColumnMaps("show tables from test");
         obsWriter.update(JsonUtils.toString(columnMap));
-        hbaseTemplate.update(new HbaseOneRow(HbaseSchema.COMPANY_ALL_COUNT, "22822").put("demo_key", "0"));
+        hbaseTemplate.update(new HbaseOneRow(HbaseSchema.COMPANY_ALL_COUNT, "22822").put("demo_key", now));
         dorisWriter.write(new DorisOneRow(DorisSchema.builder().database("test").tableName("demo").build()).putAll(columnMap));
         dorisParquetWriter.write(new DorisOneRow(DorisSchema.builder().database("test").tableName("demo").build()).putAll(columnMap));
         tableParquetWriter.write(columnMap);

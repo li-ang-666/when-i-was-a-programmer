@@ -20,11 +20,6 @@
             <groupId>com.liang</groupId>
             <artifactId>shaded-jars</artifactId>
         </dependency>
-        <!--http-->
-        <dependency>
-            <groupId>org.apache.httpcomponents.client5</groupId>
-            <artifactId>httpclient5</artifactId>
-        </dependency>
         <!--common-->
         <dependency>
             <groupId>com.liang</groupId>

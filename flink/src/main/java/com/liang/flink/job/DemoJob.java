@@ -3,6 +3,7 @@ package com.liang.flink.job;
 import com.liang.common.dto.*;
 import com.liang.common.service.database.template.HbaseTemplate;
 import com.liang.common.service.database.template.JdbcTemplate;
+import com.liang.common.service.database.template.doris.DorisParquetWriter;
 import com.liang.common.service.database.template.doris.DorisWriter;
 import com.liang.common.service.storage.obs.ObsWriter;
 import com.liang.common.service.storage.parquet.TableParquetWriter;
@@ -61,7 +62,9 @@ public class DemoJob {
         private ObsWriter obsWriter;
         private HbaseTemplate hbaseTemplate;
         private DorisWriter dorisWriter;
+        private DorisParquetWriter dorisParquetWriter;
         private TableParquetWriter tableParquetWriter;
+
 
         @Override
         public void initializeState(FunctionInitializationContext context) {
@@ -73,6 +76,7 @@ public class DemoJob {
             hbaseTemplate = new HbaseTemplate("hbaseSink");
             hbaseTemplate.enableCache();
             dorisWriter = new DorisWriter("dorisSink", 128 * 1024 * 1024);
+            dorisParquetWriter = new DorisParquetWriter("dorisSink");
             ArrayList<ReadableSchema> schemas = new ArrayList<>();
             schemas.add(ReadableSchema.of("id", "bigint unsigned"));
             schemas.add(ReadableSchema.of("name", "varchar(255)"));
@@ -86,6 +90,7 @@ public class DemoJob {
             obsWriter.update(JsonUtils.toString(new ArrayList<String>()));
             hbaseTemplate.update(new HbaseOneRow(HbaseSchema.COMPANY_ALL_COUNT, "22822").put("test_key", "0"));
             dorisWriter.write(new DorisOneRow(DorisSchema.builder().database("test").tableName("demo").build()).put("id", 1).put("name", "java"));
+            dorisParquetWriter.write(new DorisOneRow(DorisSchema.builder().database("test").tableName("demo").build()).put("id", 1).put("name", "java"));
             HashMap<String, Object> columnMap = new HashMap<>();
             columnMap.put("id", 1);
             columnMap.put("name", "java");
@@ -112,8 +117,9 @@ public class DemoJob {
             jdbcTemplate.flush();
             obsWriter.flush();
             hbaseTemplate.flush();
-            tableParquetWriter.flush();
             dorisWriter.flush();
+            dorisParquetWriter.flush();
+            tableParquetWriter.flush();
         }
     }
 }

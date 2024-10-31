@@ -10,22 +10,6 @@
     </parent>
     <artifactId>hive-udf</artifactId>
     <dependencies>
-        <!--hutool-->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-        </dependency>
-        <!--jackson-->
-        <dependency>
-            <groupId>com.liang</groupId>
-            <artifactId>shaded-jars</artifactId>
-        </dependency>
-        <!--common-->
-        <dependency>
-            <groupId>com.liang</groupId>
-            <artifactId>common</artifactId>
-            <version>1.0</version>
-        </dependency>
         <!--hive-->
         <dependency>
             <groupId>org.apache.hive</groupId>
@@ -37,6 +21,21 @@
         <dependency>
             <groupId>org.roaringbitmap</groupId>
             <artifactId>RoaringBitmap</artifactId>
+        </dependency>
+        <!--hutool-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+        <!--shaded-jackson-->
+        <dependency>
+            <groupId>com.liang</groupId>
+            <artifactId>shaded-jars</artifactId>
+        </dependency>
+        <!--common-->
+        <dependency>
+            <groupId>com.liang</groupId>
+            <artifactId>common</artifactId>
         </dependency>
     </dependencies>
     <properties>

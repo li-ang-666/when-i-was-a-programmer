@@ -60,6 +60,12 @@
             <artifactId>parquet-avro</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!--kafka-->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!--flink-Tuple-->
         <dependency>
             <groupId>org.apache.flink</groupId>

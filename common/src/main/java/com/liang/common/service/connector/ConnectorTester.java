@@ -30,23 +30,33 @@ public class ConnectorTester {
     private static final String USER = "hive";
     private static final String PASSWORD = "";
     // connector
-    private JdbcTemplate jdbcTemplate;
-    private ObsWriter obsWriter;
-    private HbaseTemplate hbaseTemplate;
-    private DorisWriter dorisWriter;
-    private DorisParquetWriter dorisParquetWriter;
-    private TableParquetWriter tableParquetWriter;
+    private final JdbcTemplate jdbcTemplate = new JdbcTemplate("427.test");
+    private final ObsWriter obsWriter = new ObsWriter("obs://hadoop-obs/flink/test/", ObsWriter.FileFormat.TXT);
+    private final HbaseTemplate hbaseTemplate = new HbaseTemplate("hbaseSink");
+    private final DorisWriter dorisWriter = new DorisWriter("dorisSink", 128 * 1024 * 1024);
+    private final DorisParquetWriter dorisParquetWriter = new DorisParquetWriter("dorisSink");
+    private final TableParquetWriter tableParquetWriter = new TableParquetWriter("obs://hadoop-obs/flink/parquet/demo/", Arrays.asList(
+            ReadableSchema.of("id", "bigint unsigned"),
+            ReadableSchema.of("name", "varchar(255)"),
+            ReadableSchema.of("age", "decimal(3,0)")
+    ));
+
+    {
+        jdbcTemplate.enableCache();
+        obsWriter.enableCache();
+        hbaseTemplate.enableCache();
+    }
 
     public static void main(String[] args) {
         Config config = ConfigUtils.createConfig();
         ConfigUtils.setConfig(config);
         ConnectorTester connectorTester = new ConnectorTester();
-        connectorTester.open();
         connectorTester.invoke();
         connectorTester.flush();
     }
 
-    public void open() {
+    public void invoke() {
+        // hive jdbc
         try {
             Class.forName(DRIVER);
             try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
@@ -61,28 +71,12 @@ public class ConnectorTester {
             log.error(msg, e);
             throw new RuntimeException(msg, e);
         }
-        jdbcTemplate = new JdbcTemplate("427.test");
-        jdbcTemplate.enableCache();
-        obsWriter = new ObsWriter("obs://hadoop-obs/flink/test/", ObsWriter.FileFormat.TXT);
-        obsWriter.enableCache();
-        hbaseTemplate = new HbaseTemplate("hbaseSink");
-        hbaseTemplate.enableCache();
-        dorisWriter = new DorisWriter("dorisSink", 128 * 1024 * 1024);
-        dorisParquetWriter = new DorisParquetWriter("dorisSink");
-        tableParquetWriter = new TableParquetWriter("obs://hadoop-obs/flink/parquet/demo/", Arrays.asList(
-                ReadableSchema.of("id", "bigint unsigned"),
-                ReadableSchema.of("name", "varchar(255)"),
-                ReadableSchema.of("age", "decimal(3,0)")
-        ));
-    }
-
-    public void invoke() {
-        Map<String, Object> columnMap = new HashMap<String, Object>() {{
-            put("id", IdUtil.getSnowflakeNextIdStr());
-            put("name", UUID.randomUUID().toString());
-            put("age", 100);
-        }};
-        jdbcTemplate.queryForColumnMaps("show tables");
+        // connector
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("id", IdUtil.getSnowflakeNextIdStr());
+        columnMap.put("name", UUID.randomUUID().toString());
+        columnMap.put("age", 100);
+        jdbcTemplate.queryForColumnMaps("show tables from test");
         obsWriter.update(JsonUtils.toString(columnMap));
         hbaseTemplate.update(new HbaseOneRow(HbaseSchema.COMPANY_ALL_COUNT, "22822").put("demo_key", "0"));
         dorisWriter.write(new DorisOneRow(DorisSchema.builder().database("test").tableName("demo").build()).putAll(columnMap));

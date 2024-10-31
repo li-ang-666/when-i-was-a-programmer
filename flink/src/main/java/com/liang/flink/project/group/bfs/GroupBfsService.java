@@ -24,13 +24,13 @@ public class GroupBfsService {
     private final Queue<Path> bfsQueue = new ConcurrentLinkedQueue<>();
     private final Map<String, Set<Path>> result = new ConcurrentHashMap<>();
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Config config = ConfigUtils.createConfig();
         ConfigUtils.setConfig(config);
         new GroupBfsService().bfs("25942218");
     }
 
-    public void bfs(String biggestShareholderId) throws Exception {
+    public void bfs(String biggestShareholderId) {
         // 格式合法
         if (!TycUtils.isUnsignedId(biggestShareholderId)) return;
         // 没有股东

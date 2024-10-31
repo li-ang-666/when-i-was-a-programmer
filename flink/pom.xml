@@ -178,7 +178,6 @@
         <dependency>
             <groupId>com.liang</groupId>
             <artifactId>common</artifactId>
-            <version>1.0</version>
         </dependency>
     </dependencies>
     <!--plugin-->

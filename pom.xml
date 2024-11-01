@@ -86,29 +86,6 @@
             </dependency>
             <!--obs & hadoop-->
             <dependency>
-                <groupId>com.huaweicloud</groupId>
-                <artifactId>esdk-obs-java-bundle</artifactId>
-                <version>3.22.3</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>log4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.logging.log4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>ch.qos.logback</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-huaweicloud</artifactId>
                 <version>3.1.1-hw-45</version>

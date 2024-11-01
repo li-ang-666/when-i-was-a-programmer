@@ -92,7 +92,7 @@ public class ConnectorTester {
         columnMap.put("create_time", now);
         jdbcTemplate.queryForColumnMaps("show tables from test");
         obsWriter.update(JsonUtils.toString(columnMap));
-        hbaseTemplate.update(new HbaseOneRow(HbaseSchema.COMPANY_ALL_COUNT, "22822").put("demo_key", now));
+        hbaseTemplate.update(new HbaseOneRow(HbaseSchema.COMPANY_ALL_COUNT, "22822").put("demo_key", System.currentTimeMillis() / 1000));
         dorisWriter.write(new DorisOneRow(DorisSchema.builder().database("test").tableName("demo").build()).putAll(columnMap));
         dorisParquetWriter.write(new DorisOneRow(DorisSchema.builder().database("test").tableName("demo").build()).putAll(columnMap));
         tableParquetWriter.write(columnMap);

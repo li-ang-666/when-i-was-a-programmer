@@ -1,7 +1,7 @@
-package com.liang.repair.impl.cache;
+package com.liang.tool.impl.cache;
 
 import com.liang.common.util.TycUtils;
-import com.liang.repair.service.ConfigHolder;
+import com.liang.tool.service.ConfigHolder;
 
 public class StringTest extends ConfigHolder {
     public static void main(String[] args) {

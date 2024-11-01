@@ -1,7 +1,7 @@
-package com.liang.repair.impl;
+package com.liang.tool.impl;
 
 import cn.hutool.http.HttpUtil;
-import com.liang.repair.service.ConfigHolder;
+import com.liang.tool.service.ConfigHolder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;

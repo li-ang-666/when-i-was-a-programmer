@@ -1,7 +1,7 @@
-package com.liang.repair.impl;
+package com.liang.tool.impl;
 
 import cn.hutool.core.io.IoUtil;
-import com.liang.repair.service.ConfigHolder;
+import com.liang.tool.service.ConfigHolder;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

@@ -1,8 +1,8 @@
-package com.liang.repair.impl;
+package com.liang.tool.impl;
 
 import com.liang.common.dto.config.DBConfig;
 import com.liang.common.util.ConfigUtils;
-import com.liang.repair.service.ConfigHolder;
+import com.liang.tool.service.ConfigHolder;
 
 import java.util.Map;
 

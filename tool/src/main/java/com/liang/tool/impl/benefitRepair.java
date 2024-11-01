@@ -1,9 +1,9 @@
-package com.liang.repair.impl;
+package com.liang.tool.impl;
 
 import com.liang.common.service.SQL;
 import com.liang.common.service.connector.database.template.JdbcTemplate;
 import com.liang.common.util.SqlUtils;
-import com.liang.repair.service.ConfigHolder;
+import com.liang.tool.service.ConfigHolder;
 
 public class benefitRepair extends ConfigHolder {
     public static void main(String[] args) {

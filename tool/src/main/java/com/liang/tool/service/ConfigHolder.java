@@ -1,4 +1,4 @@
-package com.liang.repair.service;
+package com.liang.tool.service;
 
 import com.liang.common.dto.Config;
 import com.liang.common.util.ConfigUtils;

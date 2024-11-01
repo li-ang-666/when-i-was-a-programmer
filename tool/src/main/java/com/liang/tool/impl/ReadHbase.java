@@ -1,10 +1,10 @@
-package com.liang.repair.impl;
+package com.liang.tool.impl;
 
 import com.liang.common.dto.HbaseOneRow;
 import com.liang.common.dto.HbaseSchema;
 import com.liang.common.service.connector.database.template.HbaseTemplate;
 import com.liang.common.util.JsonUtils;
-import com.liang.repair.service.ConfigHolder;
+import com.liang.tool.service.ConfigHolder;
 
 // has_controller
 // num_control_ability

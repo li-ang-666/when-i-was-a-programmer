@@ -1,6 +1,6 @@
-package com.liang.repair.impl;
+package com.liang.tool.impl;
 
-import com.liang.repair.service.ConfigHolder;
+import com.liang.tool.service.ConfigHolder;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;

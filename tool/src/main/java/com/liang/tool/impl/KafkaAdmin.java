@@ -1,6 +1,6 @@
-package com.liang.repair.impl;
+package com.liang.tool.impl;
 
-import com.liang.repair.service.ConfigHolder;
+import com.liang.tool.service.ConfigHolder;
 
 public class KafkaAdmin extends ConfigHolder {
     public static void main(String[] args) throws Exception {

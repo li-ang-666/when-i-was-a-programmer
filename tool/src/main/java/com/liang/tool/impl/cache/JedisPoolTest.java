@@ -1,7 +1,7 @@
-package com.liang.repair.impl.cache;
+package com.liang.tool.impl.cache;
 
 import com.liang.common.service.connector.database.template.RedisTemplate;
-import com.liang.repair.service.ConfigHolder;
+import com.liang.tool.service.ConfigHolder;
 
 import java.time.Duration;
 import java.util.concurrent.locks.LockSupport;

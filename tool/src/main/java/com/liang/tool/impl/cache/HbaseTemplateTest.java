@@ -1,9 +1,9 @@
-package com.liang.repair.impl.cache;
+package com.liang.tool.impl.cache;
 
 import com.liang.common.dto.HbaseOneRow;
 import com.liang.common.dto.HbaseSchema;
 import com.liang.common.service.connector.database.template.HbaseTemplate;
-import com.liang.repair.service.ConfigHolder;
+import com.liang.tool.service.ConfigHolder;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;

@@ -1,6 +1,6 @@
-package com.liang.repair.test;
+package com.liang.tool.test;
 
-import com.liang.repair.service.ConfigHolder;
+import com.liang.tool.service.ConfigHolder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;

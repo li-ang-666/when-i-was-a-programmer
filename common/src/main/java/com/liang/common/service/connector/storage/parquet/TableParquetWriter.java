@@ -83,12 +83,18 @@ public class TableParquetWriter {
     }
 
     private synchronized GenericData.Record getRecord(Map<String, Object> columnMap) {
-        GenericRecordBuilder recordBuilder = new GenericRecordBuilder(recordSchema);
-        columnMap.forEach((column, value) -> {
-            if (columnToSchema.containsKey(column)) {
-                recordBuilder.set(column, columnToSchema.get(column).formatValue(value));
-            }
-        });
-        return recordBuilder.build();
+        try {
+            GenericRecordBuilder recordBuilder = new GenericRecordBuilder(recordSchema);
+            columnMap.forEach((column, value) -> {
+                if (columnToSchema.containsKey(column)) {
+                    recordBuilder.set(column, columnToSchema.get(column).formatValue(value));
+                }
+            });
+            return recordBuilder.build();
+        } catch (Exception e) {
+            String msg = "FsParquetWriter getRecord error";
+            log.error(msg, e);
+            throw new RuntimeException(msg, e);
+        }
     }
 }

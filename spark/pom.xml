@@ -144,6 +144,7 @@
                             <artifactSet>
                                 <excludes>
                                     <exclude>com.google.code.findbugs:jsr305</exclude>
+                                    <exclude>org.apache.zookeeper:*</exclude>
                                 </excludes>
                             </artifactSet>
                             <filters>

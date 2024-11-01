@@ -18,6 +18,7 @@ public class DemoJob {
         SparkSession spark = SparkSessionFactory.createSpark(args);
         Config config = ConfigUtils.getConfig();
         spark.table("flink.product_info")
+                .limit(111)
                 .repartition()
                 .foreachPartition(new DemoSink(config));
         spark.close();
